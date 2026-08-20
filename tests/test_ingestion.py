@@ -66,3 +66,14 @@ class TestIngestionHelpers(unittest.TestCase):
                         item.unlink()
                     else:
                         item.rmdir()
+
+    def test_to_markdown_payload_parser_handles_cloudflare_list_format(self):
+        payload = {
+            "success": True,
+            "result": [
+                {"id": "abc", "name": "about.html", "data": "# About\n\nBio here."}
+            ]
+        }
+        text = ingest._to_markdown_payload_to_text(payload)
+        self.assertEqual(text, "# About\n\nBio here.\n")
+
