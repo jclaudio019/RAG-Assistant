@@ -64,6 +64,7 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/retail-operations",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md", "Final_Report.md"],
     },
     {
         "name": "Credit risk PD model",
@@ -71,6 +72,7 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/credit_risk",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md", "Final_Report.md"],
     },
     {
         "name": "Retail allocation simulator",
@@ -78,6 +80,7 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/retail-allocation-simulator",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md", "workflow.md", "how-to-use.md"],
     },
     {
         "name": "Time-series analysis",
@@ -85,6 +88,7 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/time_series_analysis",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md"],
     },
     {
         "name": "Black-Scholes options modeling",
@@ -92,6 +96,7 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/black-scholes-options-modeling",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md"],
     },
     {
         "name": "Backtesting system",
@@ -99,6 +104,7 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/backtesting-system",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md"],
     },
     {
         "name": "Warehouse club market expansion",
@@ -106,6 +112,15 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/warehouse-club-market-expansion-strategy",
         "owner": "jclaudio019",
         "branch": "main",
+        "doc_files": ["README.md"],
+    },
+    {
+        "name": "Portfolio Projects Framework",
+        "repo": "portfolio-projects",
+        "repo_url": "https://github.com/jclaudio019/portfolio-projects",
+        "owner": "jclaudio019",
+        "branch": "main",
+        "doc_files": ["README.md"],
     },
 ]
 
@@ -512,65 +527,66 @@ def _ingest_project_docs(
     markdown_normalizer: Callable[[str], str] = _normalize_markdown_content,
 ) -> List[str]:
     results = []
-    file_path = "README.md"
     for project in SHOWCASED_PROJECTS:
         owner = project["owner"]
         repo = project["repo"]
         repo_url = project["repo_url"]
         project_slug = repo
         project_name = project["name"]
+        doc_files = project.get("doc_files", ["README.md"])
 
-        try:
-            raw_content = _github_local_fallback(repo, file_path)
+        for file_path in doc_files:
             try:
+                raw_content = _github_local_fallback(repo, file_path)
+                try:
+                    if raw_content is None:
+                        raw_content = _fetch_markdown_from_github(owner, repo, project["branch"], file_path)
+                except IngestionError:
+                    fallback_raw = _github_local_fallback(repo, file_path)
+                    if fallback_raw is not None:
+                        raw_content = fallback_raw
                 if raw_content is None:
-                    raw_content = _fetch_markdown_from_github(owner, repo, project["branch"], file_path)
-            except IngestionError:
-                fallback_raw = _github_local_fallback(repo, file_path)
-                if fallback_raw is not None:
-                    raw_content = fallback_raw
-            if raw_content is None:
-                continue
+                    continue
 
-            doc_id = f"project::{project_slug}::{file_path}"
-            normalized = markdown_normalizer(raw_content)
-            raw_sha = _sha256_hex(raw_content.encode("utf-8"))
-            normalized_sha = _sha256_hex(normalized.encode("utf-8"))
-            raw_path = RAW_ROOT / "projects" / project_slug / file_path
-            normalized_path = PROCESSED_ROOT / "projects" / project_slug / f"{Path(file_path).with_suffix('.md')}"
-            _write_text(raw_path, raw_content.strip() + "\n")
-            _write_text(normalized_path, normalized)
-            _upsert_document(
-                index,
-                DocumentSource(
-                    document_id=doc_id,
+                doc_id = f"project::{project_slug}::{file_path}"
+                normalized = markdown_normalizer(raw_content)
+                raw_sha = _sha256_hex(raw_content.encode("utf-8"))
+                normalized_sha = _sha256_hex(normalized.encode("utf-8"))
+                raw_path = RAW_ROOT / "projects" / project_slug / file_path
+                normalized_path = PROCESSED_ROOT / "projects" / project_slug / f"{Path(file_path).with_suffix('.md')}"
+                _write_text(raw_path, raw_content.strip() + "\n")
+                _write_text(normalized_path, normalized)
+                _upsert_document(
+                    index,
+                    DocumentSource(
+                        document_id=doc_id,
+                        source_type="project",
+                        source_url=repo_url,
+                        raw_path=str(raw_path),
+                        normalized_path=str(normalized_path),
+                        title=f"{project_name} — {file_path}",
+                        raw_sha256=raw_sha,
+                        normalized_sha256=normalized_sha,
+                        last_checked_at=_now_utc(),
+                        last_changed_at=_now_utc(),
+                        repo_url=repo_url,
+                        file_path=file_path,
+                        project_name=project_name,
+                        status="ingested",
+                    ),
+                )
+                results.append(doc_id)
+            except Exception as exc:
+                _upsert_failed(
+                    index,
+                    doc_id=f"project::{project_slug}::{file_path}",
                     source_type="project",
                     source_url=repo_url,
-                    raw_path=str(raw_path),
-                    normalized_path=str(normalized_path),
-                    title=project_name,
-                    raw_sha256=raw_sha,
-                    normalized_sha256=normalized_sha,
-                    last_checked_at=_now_utc(),
-                    last_changed_at=_now_utc(),
+                    title=f"{project_name} — {file_path}",
+                    details=str(exc),
                     repo_url=repo_url,
-                    file_path=file_path,
-                    project_name=project_name,
-                    status="ingested",
-                ),
-            )
-            results.append(doc_id)
-        except Exception as exc:
-            _upsert_failed(
-                index,
-                doc_id=f"project::{project_slug}::README.md",
-                source_type="project",
-                source_url=repo_url,
-                title=project_name,
-                details=str(exc),
-                repo_url=repo_url,
-            )
-            continue
+                )
+                continue
     return results
 
 
