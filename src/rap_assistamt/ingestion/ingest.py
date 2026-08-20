@@ -33,7 +33,7 @@ class DocumentSource:
     project_name: Optional[str] = None
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
 KNOWLEDGE_ROOT = PROJECT_ROOT / "knowledge"
 RAW_ROOT = KNOWLEDGE_ROOT / "raw"
 PROCESSED_ROOT = KNOWLEDGE_ROOT / "processed" / "documents"
@@ -355,21 +355,51 @@ def _fetch_markdown_from_github(owner: str, repo: str, branch: str, file_path: s
     return _decode_html(_fetch(raw_url))
 
 
+def _resolve_local_repo_path(repo_slug: str) -> Optional[Path]:
+    local_aliases = {
+        "retail-operations": "retail-operation",
+    }
+    candidate_slug = local_aliases.get(repo_slug, repo_slug)
+    fallback_dirs = [
+        PROJECT_ROOT.parent / "project_potfolio",
+        PROJECT_ROOT.parent / "project_portfolio-git-backup",
+    ]
+    for directory in fallback_dirs:
+        repo_path = directory / candidate_slug
+        if repo_path.exists():
+            return repo_path
+    return None
+
+
 def _github_local_fallback(repo_slug: str, file_path: str) -> Optional[str]:
     # Controlled fallback from local portfolio copies for non-public/private repos.
-    fallback_dirs = [
-        PROJECT_ROOT.parent / "project_potfolio" / repo_slug,
-        PROJECT_ROOT.parent / "project_portfolio-git-backup" / repo_slug,
-    ]
-    candidate = None
-    for directory in fallback_dirs:
-        candidate_path = directory / file_path
-        if candidate_path.exists():
-            candidate = candidate_path
-            break
-    if not candidate:
+    repo_path = _resolve_local_repo_path(repo_slug)
+    if repo_path is None:
         return None
-    return candidate.read_text(encoding="utf-8")
+
+    candidate_path = repo_path / file_path
+    if candidate_path.exists():
+        return candidate_path.read_text(encoding="utf-8")
+    return None
+
+
+def _github_local_markdown_files(repo_slug: str) -> List[str]:
+    repo_path = _resolve_local_repo_path(repo_slug)
+    if repo_path is None:
+        return []
+
+    local_docs = [repo_path / "README.md"]
+    docs_dir = repo_path / "docs"
+    markdown_paths: List[str] = []
+    if docs_dir.exists():
+        for path in docs_dir.rglob("*.md"):
+            if path.is_file():
+                markdown_paths.append(str(path.relative_to(repo_path)).replace("\\", "/"))
+
+    for file_path in local_docs:
+        if file_path.exists():
+            markdown_paths.append(str(file_path.relative_to(repo_path)).replace("\\", "/"))
+    return sorted(set(markdown_paths))
 
 
 def _ingest_website(
@@ -407,7 +437,7 @@ def _ingest_website(
                     normalized_path=str(normalized_path),
                     title=title,
                     raw_sha256=raw_sha,
-                    normalized_sha=normalized_sha,
+                    normalized_sha256=normalized_sha,
                     last_checked_at=_now_utc(),
                     last_changed_at=_now_utc(),
                     project_name=None,
@@ -436,13 +466,18 @@ def _ingest_project_docs(
         project_name = project["name"]
 
         try:
-            markdown_paths = ["README.md"]
-            discovered_docs = _github_markdown_file_paths(owner, repo, "docs", branch=project["branch"])
-            markdown_paths.extend(discovered_docs)
+            local_markdown_paths = _github_local_markdown_files(repo)
+            if local_markdown_paths:
+                markdown_paths = list(local_markdown_paths)
+            else:
+                discovered_docs = _github_markdown_file_paths(owner, repo, "docs", branch=project["branch"])
+                markdown_paths = ["README.md"]
+                markdown_paths.extend(discovered_docs)
             for file_path in markdown_paths:
-                raw_content = None
+                raw_content = _github_local_fallback(repo, file_path)
                 try:
-                    raw_content = _fetch_markdown_from_github(owner, repo, project["branch"], file_path)
+                    if raw_content is None:
+                        raw_content = _fetch_markdown_from_github(owner, repo, project["branch"], file_path)
                 except IngestionError:
                     fallback_raw = _github_local_fallback(repo, file_path)
                     if fallback_raw is not None:
@@ -468,7 +503,7 @@ def _ingest_project_docs(
                         normalized_path=str(normalized_path),
                         title=project_name,
                         raw_sha256=raw_sha,
-                        normalized_sha=normalized_sha,
+                        normalized_sha256=normalized_sha,
                         last_checked_at=_now_utc(),
                         last_changed_at=_now_utc(),
                         repo_url=repo_url,
@@ -547,4 +582,3 @@ def preview_ingest_plan() -> dict:
         "idempotent": True,
         "hash_over": ["normalized_content"],
     }
-
