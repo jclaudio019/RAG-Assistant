@@ -1,4 +1,4 @@
-"""Ingestion utilities for RAP-Assistant knowledge preparation."""
+"""Ingestion utilities for RAG-Assistant knowledge preparation."""
 
 from .ingest import ingest_all_sources
 

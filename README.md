@@ -1,4 +1,4 @@
-# RAP-Asistamt
+# RAG-Assistant
 
 A public portfolio assistant project powered by retrieval-augmented generation (RAG).
 
@@ -6,7 +6,7 @@ A public portfolio assistant project powered by retrieval-augmented generation (
 
 This project will build an assistant that answers questions about my experience, projects, and technical work using grounded sources:
 
-- Resume
+- Resume / Career Profile
 - Personal website
 - GitHub repositories
 
@@ -16,7 +16,7 @@ The assistant should always prioritize accuracy and cite where answers come from
 
 This repository is intentionally minimal to start work quickly:
 
-- `src/rap_assistamt/` contains the project source package.
+- `src/rag_assistant/` contains the project source package.
 - `README.md` captures the project purpose and scope.
 - `pyproject.toml` defines package metadata.
 
@@ -40,7 +40,7 @@ Initial scaffold created on 2026-08-19.
   - `/experience`
   - `/skills`
 - `/contact` is intentionally excluded.
-- `/resume` is intentionally skipped because canonical career content is in `knowledge/raw/jose_claudio_career_knowledge_base.md`.
+- Canonical career content is in `knowledge/raw/jose_claudio_career_knowledge_base.md`.
 
 ### GitHub repositories ingested (showcase only)
 
@@ -54,8 +54,8 @@ Initial scaffold created on 2026-08-19.
 
 ## Commands
 
-- `python -m rap_assistamt.main plan` shows the planned ingestion set.
-- `python -m rap_assistamt.main ingest` runs website + project ingestion.
+- `python -m rag_assistant.main plan` shows the planned ingestion set.
+- `python -m rag_assistant.main ingest` runs website + project ingestion.
 
 ## Storage model
 

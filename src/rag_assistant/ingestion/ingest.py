@@ -177,7 +177,7 @@ def _fetch(url: str, timeout: int = 30) -> bytes:
 def _fetch_json(url: str, timeout: int = 30) -> object:
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "rap-assistant-ingestion/1.0",
+        "User-Agent": "rag-assistant-ingestion/1.0",
     }
     request = urllib.request.Request(url, headers=headers)
     try:
@@ -512,6 +512,7 @@ def _ingest_project_docs(
     markdown_normalizer: Callable[[str], str] = _normalize_markdown_content,
 ) -> List[str]:
     results = []
+    file_path = "README.md"
     for project in SHOWCASED_PROJECTS:
         owner = project["owner"]
         repo = project["repo"]
@@ -520,53 +521,45 @@ def _ingest_project_docs(
         project_name = project["name"]
 
         try:
-            local_markdown_paths = _github_local_markdown_files(repo)
-            if local_markdown_paths:
-                markdown_paths = list(local_markdown_paths)
-            else:
-                discovered_docs = _github_markdown_file_paths(owner, repo, "docs", branch=project["branch"])
-                markdown_paths = ["README.md"]
-                markdown_paths.extend(discovered_docs)
-            for file_path in markdown_paths:
-                raw_content = _github_local_fallback(repo, file_path)
-                try:
-                    if raw_content is None:
-                        raw_content = _fetch_markdown_from_github(owner, repo, project["branch"], file_path)
-                except IngestionError:
-                    fallback_raw = _github_local_fallback(repo, file_path)
-                    if fallback_raw is not None:
-                        raw_content = fallback_raw
+            raw_content = _github_local_fallback(repo, file_path)
+            try:
                 if raw_content is None:
-                    continue
+                    raw_content = _fetch_markdown_from_github(owner, repo, project["branch"], file_path)
+            except IngestionError:
+                fallback_raw = _github_local_fallback(repo, file_path)
+                if fallback_raw is not None:
+                    raw_content = fallback_raw
+            if raw_content is None:
+                continue
 
-                doc_id = f"project::{project_slug}::{file_path}"
-                normalized = markdown_normalizer(raw_content)
-                raw_sha = _sha256_hex(raw_content.encode("utf-8"))
-                normalized_sha = _sha256_hex(normalized.encode("utf-8"))
-                raw_path = RAW_ROOT / "projects" / project_slug / file_path
-                normalized_path = PROCESSED_ROOT / "projects" / project_slug / f"{Path(file_path).with_suffix('.md')}"
-                _write_text(raw_path, raw_content.strip() + "\n")
-                _write_text(normalized_path, normalized)
-                _upsert_document(
-                    index,
-                    DocumentSource(
-                        document_id=doc_id,
-                        source_type="project",
-                        source_url=repo_url,
-                        raw_path=str(raw_path),
-                        normalized_path=str(normalized_path),
-                        title=project_name,
-                        raw_sha256=raw_sha,
-                        normalized_sha256=normalized_sha,
-                        last_checked_at=_now_utc(),
-                        last_changed_at=_now_utc(),
-                        repo_url=repo_url,
-                        file_path=file_path,
-                        project_name=project_name,
-                        status="ingested",
-                    ),
-                )
-                results.append(doc_id)
+            doc_id = f"project::{project_slug}::{file_path}"
+            normalized = markdown_normalizer(raw_content)
+            raw_sha = _sha256_hex(raw_content.encode("utf-8"))
+            normalized_sha = _sha256_hex(normalized.encode("utf-8"))
+            raw_path = RAW_ROOT / "projects" / project_slug / file_path
+            normalized_path = PROCESSED_ROOT / "projects" / project_slug / f"{Path(file_path).with_suffix('.md')}"
+            _write_text(raw_path, raw_content.strip() + "\n")
+            _write_text(normalized_path, normalized)
+            _upsert_document(
+                index,
+                DocumentSource(
+                    document_id=doc_id,
+                    source_type="project",
+                    source_url=repo_url,
+                    raw_path=str(raw_path),
+                    normalized_path=str(normalized_path),
+                    title=project_name,
+                    raw_sha256=raw_sha,
+                    normalized_sha256=normalized_sha,
+                    last_checked_at=_now_utc(),
+                    last_changed_at=_now_utc(),
+                    repo_url=repo_url,
+                    file_path=file_path,
+                    project_name=project_name,
+                    status="ingested",
+                ),
+            )
+            results.append(doc_id)
         except Exception as exc:
             _upsert_failed(
                 index,
@@ -627,6 +620,12 @@ def ingest_all_sources() -> dict:
     website_ingested = _ingest_website(index, normalize_html=_normalize_html)
     project_ingested = _ingest_project_docs(index)
     career_ingested = _ingest_career_profile(index)
+
+    # Prune stale project entries that are not in the current project set
+    current_project_ids = set(project_ingested)
+    stale_keys = [k for k in index if k.startswith("project::") and k not in current_project_ids]
+    for k in stale_keys:
+        del index[k]
 
     _save_state(index)
     return {

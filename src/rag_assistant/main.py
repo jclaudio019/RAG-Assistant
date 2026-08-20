@@ -1,10 +1,10 @@
-"""Entry point for RAP-Asistamt."""
+"""Entry point for RAG-Assistant."""
 
 import json
 import sys
 
-from rap_assistamt.ingestion import ingest_all_sources
-from rap_assistamt.ingestion.ingest import preview_ingest_plan
+from rag_assistant.ingestion import ingest_all_sources
+from rag_assistant.ingestion.ingest import preview_ingest_plan
 
 
 def main() -> None:
@@ -18,7 +18,7 @@ def main() -> None:
         print(json.dumps(preview_ingest_plan(), indent=2, sort_keys=True))
         return
 
-    print("Usage: python -m rap_assistamt.main [ingest|plan]")
+    print("Usage: python -m rag_assistant.main [ingest|plan]")
 
 
 if __name__ == "__main__":
