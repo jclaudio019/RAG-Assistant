@@ -8,4 +8,7 @@ version = "0.1.0"
 description = "RAG-powered portfolio assistant for career and technical work discovery"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "langchain-text-splitters>=0.2.0",
+    "tiktoken>=0.7.0",
+]

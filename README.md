@@ -55,7 +55,8 @@ Initial scaffold created on 2026-08-19.
 ## Commands
 
 - `python -m rag_assistant.main plan` shows the planned ingestion set.
-- `python -m rag_assistant.main ingest` runs website + project ingestion.
+- `python -m rag_assistant.main ingest` runs website + project + career profile ingestion.
+- `python -m rag_assistant.main chunk` runs structure-aware contextual chunking and generates chunk reports.
 
 ## Storage model
 
@@ -63,10 +64,15 @@ Initial scaffold created on 2026-08-19.
 - Processed website Markdown: `knowledge/processed/documents/website/<slug>.md`
 - Raw project docs: `knowledge/raw/projects/<repo>/<file>`
 - Processed project docs: `knowledge/processed/documents/projects/<repo>/<file>`
+- Raw career profile: `knowledge/raw/jose_claudio_career_knowledge_base.md`
+- Processed career profile: `knowledge/processed/documents/career/jose_claudio_career_knowledge_base.md`
 - Current document states: `knowledge/processed/documents/index.json`
+- Retrieval-ready chunks: `knowledge/processed/chunks/chunks.jsonl`
+- Chunk audit report: `knowledge/processed/chunks/chunk_report.md`
 
 ## Notes
 
 - HTML pages are normalized through Cloudflare toMarkdown conversion.
 - GitHub Markdown documents are normalized through deterministic cleanup validation.
 - Ingestion is idempotent using SHA-256 hashes over raw and normalized content.
+- Chunking preserves markdown heading hierarchy (`heading_path`, `section`, `parent_section`), embeds document provenance, and applies forced overlap only when subdividing oversized sections.
