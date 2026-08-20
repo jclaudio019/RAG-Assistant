@@ -1,0 +1,280 @@
+{
+  "documents_processed": 25,
+  "total_chunks": 154,
+  "total_source_tokens": 30143,
+  "total_chunk_tokens": 30579,
+  "duplication_ratio": 1.014,
+  "min_tokens": 23,
+  "max_tokens": 847,
+  "avg_tokens": 198.6,
+  "median_tokens": 168.5,
+  "p90_tokens": 348,
+  "source_word_coverage_pct": 100.0,
+  "token_distribution": {
+    "< 100 tokens": 27,
+    "100 – 300 tokens": 105,
+    "300 – 500 tokens": 17,
+    "500 – 700 tokens": 4,
+    "700 – 850 tokens": 1,
+    "> 850 tokens": 0
+  },
+  "document_summaries": [
+    {
+      "document_id": "career::knowledge_base",
+      "title": "Jose Claudio — Career & Portfolio Knowledge Base",
+      "source_type": "career_profile",
+      "chunks": 19,
+      "total_tokens": 2849,
+      "avg_tokens": 149.94736842105263,
+      "min_tokens": 33,
+      "max_tokens": 369
+    },
+    {
+      "document_id": "project::backtesting-system::README.md",
+      "title": "Backtesting system",
+      "source_type": "project",
+      "chunks": 5,
+      "total_tokens": 1386,
+      "avg_tokens": 277.2,
+      "min_tokens": 30,
+      "max_tokens": 847
+    },
+    {
+      "document_id": "project::black-scholes-options-modeling::README.md",
+      "title": "Black-Scholes options modeling",
+      "source_type": "project",
+      "chunks": 4,
+      "total_tokens": 594,
+      "avg_tokens": 148.5,
+      "min_tokens": 37,
+      "max_tokens": 280
+    },
+    {
+      "document_id": "project::credit_risk::Final_Report.md",
+      "title": "Credit risk PD model — Final_Report.md",
+      "source_type": "project",
+      "chunks": 11,
+      "total_tokens": 1704,
+      "avg_tokens": 154.9090909090909,
+      "min_tokens": 93,
+      "max_tokens": 277
+    },
+    {
+      "document_id": "project::credit_risk::README.md",
+      "title": "Credit risk PD model",
+      "source_type": "project",
+      "chunks": 6,
+      "total_tokens": 906,
+      "avg_tokens": 151.0,
+      "min_tokens": 68,
+      "max_tokens": 242
+    },
+    {
+      "document_id": "project::portfolio-projects::README.md",
+      "title": "Portfolio Projects Framework — README.md",
+      "source_type": "project",
+      "chunks": 3,
+      "total_tokens": 336,
+      "avg_tokens": 112.0,
+      "min_tokens": 81,
+      "max_tokens": 163
+    },
+    {
+      "document_id": "project::retail-allocation-simulator::README.md",
+      "title": "Retail allocation simulator",
+      "source_type": "project",
+      "chunks": 5,
+      "total_tokens": 798,
+      "avg_tokens": 159.6,
+      "min_tokens": 67,
+      "max_tokens": 218
+    },
+    {
+      "document_id": "project::retail-allocation-simulator::how-to-use.md",
+      "title": "Retail allocation simulator — how-to-use.md",
+      "source_type": "project",
+      "chunks": 3,
+      "total_tokens": 363,
+      "avg_tokens": 121.0,
+      "min_tokens": 91,
+      "max_tokens": 143
+    },
+    {
+      "document_id": "project::retail-allocation-simulator::workflow.md",
+      "title": "Retail allocation simulator — workflow.md",
+      "source_type": "project",
+      "chunks": 18,
+      "total_tokens": 3681,
+      "avg_tokens": 204.5,
+      "min_tokens": 98,
+      "max_tokens": 533
+    },
+    {
+      "document_id": "project::retail-operations::Final_Report.md",
+      "title": "Retail demand forecasting — Final_Report.md",
+      "source_type": "project",
+      "chunks": 13,
+      "total_tokens": 3360,
+      "avg_tokens": 258.46153846153845,
+      "min_tokens": 85,
+      "max_tokens": 591
+    },
+    {
+      "document_id": "project::retail-operations::README.md",
+      "title": "Retail demand forecasting",
+      "source_type": "project",
+      "chunks": 5,
+      "total_tokens": 838,
+      "avg_tokens": 167.6,
+      "min_tokens": 45,
+      "max_tokens": 241
+    },
+    {
+      "document_id": "project::time_series_analysis::README.md",
+      "title": "Time-series analysis",
+      "source_type": "project",
+      "chunks": 5,
+      "total_tokens": 670,
+      "avg_tokens": 134.0,
+      "min_tokens": 88,
+      "max_tokens": 176
+    },
+    {
+      "document_id": "project::warehouse-club-market-expansion-strategy::README.md",
+      "title": "Warehouse club market expansion",
+      "source_type": "project",
+      "chunks": 4,
+      "total_tokens": 730,
+      "avg_tokens": 182.5,
+      "min_tokens": 80,
+      "max_tokens": 299
+    },
+    {
+      "document_id": "website::about",
+      "title": "About",
+      "source_type": "website",
+      "chunks": 4,
+      "total_tokens": 503,
+      "avg_tokens": 125.75,
+      "min_tokens": 83,
+      "max_tokens": 171
+    },
+    {
+      "document_id": "website::experience",
+      "title": "Experience",
+      "source_type": "website",
+      "chunks": 4,
+      "total_tokens": 742,
+      "avg_tokens": 185.5,
+      "min_tokens": 97,
+      "max_tokens": 304
+    },
+    {
+      "document_id": "website::home",
+      "title": "Home",
+      "source_type": "website",
+      "chunks": 3,
+      "total_tokens": 769,
+      "avg_tokens": 256.3333333333333,
+      "min_tokens": 23,
+      "max_tokens": 495
+    },
+    {
+      "document_id": "website::projects",
+      "title": "Projects",
+      "source_type": "website",
+      "chunks": 1,
+      "total_tokens": 557,
+      "avg_tokens": 557.0,
+      "min_tokens": 557,
+      "max_tokens": 557
+    },
+    {
+      "document_id": "website::projects-backtesting-system",
+      "title": "Backtesting system",
+      "source_type": "website",
+      "chunks": 4,
+      "total_tokens": 1058,
+      "avg_tokens": 264.5,
+      "min_tokens": 183,
+      "max_tokens": 425
+    },
+    {
+      "document_id": "website::projects-black-scholes-options-modeling",
+      "title": "Black-Scholes modeling",
+      "source_type": "website",
+      "chunks": 6,
+      "total_tokens": 1538,
+      "avg_tokens": 256.3333333333333,
+      "min_tokens": 108,
+      "max_tokens": 481
+    },
+    {
+      "document_id": "website::projects-credit-risk-pd-model",
+      "title": "Credit risk PD model",
+      "source_type": "website",
+      "chunks": 6,
+      "total_tokens": 1420,
+      "avg_tokens": 236.66666666666666,
+      "min_tokens": 101,
+      "max_tokens": 337
+    },
+    {
+      "document_id": "website::projects-retail-allocation-simulator",
+      "title": "Retail allocation simulator",
+      "source_type": "website",
+      "chunks": 4,
+      "total_tokens": 971,
+      "avg_tokens": 242.75,
+      "min_tokens": 175,
+      "max_tokens": 359
+    },
+    {
+      "document_id": "website::projects-retail-demand-forecasting",
+      "title": "Retail demand forecasting",
+      "source_type": "website",
+      "chunks": 11,
+      "total_tokens": 3162,
+      "avg_tokens": 287.45454545454544,
+      "min_tokens": 137,
+      "max_tokens": 665
+    },
+    {
+      "document_id": "website::projects-time-series-analysis-r",
+      "title": "Time-series analysis",
+      "source_type": "website",
+      "chunks": 5,
+      "total_tokens": 1071,
+      "avg_tokens": 214.2,
+      "min_tokens": 128,
+      "max_tokens": 309
+    },
+    {
+      "document_id": "website::projects-warehouse-club-market-expansion",
+      "title": "Warehouse club expansion",
+      "source_type": "website",
+      "chunks": 2,
+      "total_tokens": 210,
+      "avg_tokens": 105.0,
+      "min_tokens": 65,
+      "max_tokens": 145
+    },
+    {
+      "document_id": "website::skills",
+      "title": "Skills",
+      "source_type": "website",
+      "chunks": 3,
+      "total_tokens": 363,
+      "avg_tokens": 121.0,
+      "min_tokens": 98,
+      "max_tokens": 144
+    }
+  ],
+  "validation_checks": {
+    "all_chunks_under_max_token_ceiling": true,
+    "no_empty_chunks": true,
+    "source_coverage_healthy_ge_98pct": true,
+    "metadata_provenance_preserved": true,
+    "all_chunk_ids_unique": true
+  }
+}
