@@ -110,6 +110,19 @@ SHOWCASED_PROJECTS: List[dict] = [
 ]
 
 
+def _load_env() -> None:
+    env_file = PROJECT_ROOT / ".env"
+    if env_file.exists():
+        for line in env_file.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                os.environ.setdefault(k.strip(), v.strip().strip("'\""))
+
+
+_load_env()
+
+
 class IngestionError(RuntimeError):
     pass
 
@@ -150,8 +163,12 @@ def _normalize_markdown_content(raw_markdown: str) -> str:
 
 
 def _fetch(url: str, timeout: int = 30) -> bytes:
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    }
+    request = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(url, timeout=timeout) as response:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
             return response.read()
     except Exception as exc:
         raise IngestionError(f"fetch-failed: {url}") from exc
@@ -191,14 +208,22 @@ def _to_markdown_payload_to_text(payload: object) -> str:
     if not isinstance(payload, dict):
         raise IngestionError("invalid-cloudflare-response")
 
-    if "result" in payload and isinstance(payload["result"], str):
-        return payload["result"].strip() + "\n"
-
-    if "result" in payload and isinstance(payload["result"], dict):
-        result = payload["result"]
-        for key in ("text", "content", "markdown"):
-            if key in result and isinstance(result[key], str):
-                return result[key].strip() + "\n"
+    if "result" in payload:
+        res = payload["result"]
+        if isinstance(res, str):
+            return res.strip() + "\n"
+        if isinstance(res, dict):
+            for key in ("data", "text", "content", "markdown"):
+                if key in res and isinstance(res[key], str):
+                    return res[key].strip() + "\n"
+        if isinstance(res, list) and res:
+            first = res[0]
+            if isinstance(first, str):
+                return first.strip() + "\n"
+            if isinstance(first, dict):
+                for key in ("data", "text", "content", "markdown"):
+                    if key in first and isinstance(first[key], str):
+                        return first[key].strip() + "\n"
 
     if "data" in payload:
         data = payload["data"]
@@ -225,31 +250,57 @@ def _cloudflare_to_markdown(
     if not endpoint or not api_token:
         raise IngestionError("cloudflare-credentials-not-configured")
 
-    body = {
-        "content": html,
-        "conversionOptions": {
-            "output": {"format": "markdown"},
-            "html": {"preserveLinkTarget": False},
-            "metadata": {"url": source_url},
-        },
-        "files": [{"filename": "index.html", "content": html}],
-    }
+    import uuid
+    boundary = f"----WebKitFormBoundary{uuid.uuid4().hex}"
+    filename = Path(urllib.parse.urlparse(source_url).path).name or "index"
+    if not filename.endswith(".html"):
+        filename = f"{filename}.html"
+
+    body = (
+        f"--{boundary}\r\n"
+        f'Content-Disposition: form-data; name="files"; filename="{filename}"\r\n'
+        f"Content-Type: text/html\r\n\r\n"
+        f"{html}\r\n"
+        f"--{boundary}--\r\n"
+    ).encode("utf-8")
 
     request = urllib.request.Request(
         endpoint,
-        data=json.dumps(body).encode("utf-8"),
+        data=body,
         headers={
             "Authorization": f"Bearer {api_token}",
-            "Content-Type": "application/json",
+            "Content-Type": f"multipart/form-data; boundary={boundary}",
         },
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=60) as response:
             payload = json.loads(response.read().decode("utf-8", errors="replace"))
             return _to_markdown_payload_to_text(payload)
     except Exception as exc:
         raise IngestionError(f"cloudflare-tomarkdown-failed:{source_url}") from exc
+
+
+def _render_website_pages(pages: List[dict]) -> Dict[str, tuple[str, str]]:
+    """Render pages using Playwright headless browser for SPA apps, returning {path: (html, title)}."""
+    rendered: Dict[str, tuple[str, str]] = {}
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page()
+            for p_info in pages:
+                path = p_info["path"]
+                url = f"{WEBSITE_ROOT}{path}"
+                try:
+                    page.goto(url, wait_until="networkidle", timeout=30000)
+                    rendered[path] = (page.content(), page.title())
+                except Exception:
+                    pass
+            browser.close()
+    except Exception:
+        pass
+    return rendered
 
 
 def _load_state() -> dict:
@@ -279,7 +330,7 @@ def _upsert_document(index: dict, doc: DocumentSource) -> None:
         return
 
     unchanged = (
-        existing.get("raw_sha256") == doc.raw_sha256
+        bool(existing.get("normalized_sha256"))
         and existing.get("normalized_sha256") == doc.normalized_sha256
     )
 
@@ -407,8 +458,8 @@ def _ingest_website(
     normalize_html: Callable[[str, str], str],
 ) -> List[str]:
     results = []
-    account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
-    api_token = os.environ.get("CLOUDFLARE_AI_API_TOKEN")
+    rendered_pages = _render_website_pages(WEBSITE_PAGE_ORDER)
+
     for page in WEBSITE_PAGE_ORDER:
         slug = page["slug"]
         path = page["path"]
@@ -417,13 +468,16 @@ def _ingest_website(
         normalized_path = PROCESSED_ROOT / "website" / f"{slug}.md"
         doc_id = f"website::{slug}"
         try:
-            html_bytes = _fetch(source_url)
-            html = _decode_html(html_bytes)
-            title = _extract_html_title(html)
-            if page.get("title"):
-                title = page["title"]
+            if path in rendered_pages:
+                html, page_title = rendered_pages[path]
+            else:
+                html_bytes = _fetch(source_url)
+                html = _decode_html(html_bytes)
+                page_title = _extract_html_title(html)
+
+            title = page["title"] if page.get("title") else page_title
             normalized = normalize_html(html, source_url)
-            raw_sha = _sha256_hex(html_bytes)
+            raw_sha = _sha256_hex(html.encode("utf-8"))
             normalized_sha = _sha256_hex(normalized.encode("utf-8"))
             _write_text(raw_path, html)
             _write_text(normalized_path, normalized)
@@ -527,8 +581,42 @@ def _ingest_project_docs(
     return results
 
 
+def _ingest_career_profile(
+    index: dict,
+    markdown_normalizer: Callable[[str], str] = _normalize_markdown_content,
+) -> Optional[str]:
+    career_file = RAW_ROOT / "jose_claudio_career_knowledge_base.md"
+    if not career_file.exists():
+        return None
+
+    raw_content = career_file.read_text(encoding="utf-8")
+    doc_id = "career::knowledge_base"
+    normalized = markdown_normalizer(raw_content)
+    raw_sha = _sha256_hex(raw_content.encode("utf-8"))
+    normalized_sha = _sha256_hex(normalized.encode("utf-8"))
+    normalized_path = PROCESSED_ROOT / "career" / "jose_claudio_career_knowledge_base.md"
+    _write_text(normalized_path, normalized)
+    _upsert_document(
+        index,
+        DocumentSource(
+            document_id=doc_id,
+            source_type="career_profile",
+            source_url="local::knowledge/raw/jose_claudio_career_knowledge_base.md",
+            raw_path=str(career_file),
+            normalized_path=str(normalized_path),
+            title="Jose Claudio — Career & Portfolio Knowledge Base",
+            raw_sha256=raw_sha,
+            normalized_sha256=normalized_sha,
+            last_checked_at=_now_utc(),
+            last_changed_at=_now_utc(),
+            status="ingested",
+        ),
+    )
+    return doc_id
+
+
 def ingest_all_sources() -> dict:
-    """Run ingestion for accepted website pages and showcased project docs."""
+    """Run ingestion for accepted website pages, showcased project docs, and career knowledge base."""
     index = _load_state()
     account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
     api_token = os.environ.get("CLOUDFLARE_AI_API_TOKEN")
@@ -538,11 +626,13 @@ def ingest_all_sources() -> dict:
 
     website_ingested = _ingest_website(index, normalize_html=_normalize_html)
     project_ingested = _ingest_project_docs(index)
+    career_ingested = _ingest_career_profile(index)
 
     _save_state(index)
     return {
         "website_count": len(website_ingested),
         "project_count": len(project_ingested),
+        "career_count": 1 if career_ingested else 0,
         "document_count": len(index),
     }
 
