@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from rap_assistamt.ingestion import ingest
+from rag_assistant.ingestion import ingest
 
 
 class TestIngestionHelpers(unittest.TestCase):
