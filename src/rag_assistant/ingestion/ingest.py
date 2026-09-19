@@ -72,7 +72,11 @@ SHOWCASED_PROJECTS: List[dict] = [
         "repo_url": "https://github.com/jclaudio019/credit_risk",
         "owner": "jclaudio019",
         "branch": "main",
-        "doc_files": ["README.md", "Final_Report.md"],
+        "doc_files": [
+            "README.md",
+            "reports/FINAL_REPORT.md",
+            "docs/PORTFOLIO_CASE_STUDY.md",
+        ],
     },
     {
         "name": "Retail allocation simulator",
