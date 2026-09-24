@@ -2,7 +2,7 @@
 
 I use AI most often to remove repetitive work, but I kept encountering Retrieval-Augmented Generation without fully understanding what happened between a source document and a grounded answer. I built this project to examine that pipeline one part at a time: ingestion, chunking, embeddings, retrieval, context assembly, generation, citations, abstention, and evaluation.
 
-Chunking was the first design question. I considered three common approaches: fixed-size chunks, recursive splitting, and semantic or document-structure-aware chunks. For this corpus, headings and document hierarchy carry useful context, so I chose structure-aware Markdown splitting with recursive subdivision only when a section is too large.
+Chunking was the first design question. I considered three practical approaches for this corpus: fixed-size chunks, recursive splitting, and document-structure-aware chunks. Because headings and document hierarchy carry useful context, I chose structure-aware Markdown splitting with recursive subdivision only when a section is too large.
 
 The practical use case came from my portfolio. A résumé and project page cannot contain every relevant detail, while a general chatbot can easily blur professional experience, project work, and unsupported claims. The result is a live portfolio assistant that retrieves from allowlisted public sources, labels the type of experience, cites the evidence, links to the relevant work, and abstains when the available context is insufficient.
 
