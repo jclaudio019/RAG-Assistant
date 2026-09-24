@@ -30,11 +30,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.691,
-        0.6878,
-        0.6844,
-        0.6774,
-        0.6771
+        0.6962,
+        0.6925,
+        0.686,
+        0.685,
+        0.6799
       ]
     },
     {
@@ -60,11 +60,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7583,
-        0.7553,
-        0.7426,
-        0.7182,
-        0.7019
+        0.765,
+        0.7649,
+        0.7383,
+        0.7234,
+        0.7086
       ]
     },
     {
@@ -79,11 +79,11 @@
         "website::experience"
       ],
       "retrieved_document_ids": [
-        "website::projects-retail-demand-forecasting",
         "career::knowledge_base",
+        "website::projects-retail-demand-forecasting",
         "project::retail-operations::Final_Report.md",
-        "website::projects-retail-allocation-simulator",
-        "website::projects-retail-demand-forecasting"
+        "website::experience",
+        "career::knowledge_base"
       ],
       "matched_facts": [
         "$1M",
@@ -91,11 +91,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
+        0.734,
         0.7303,
-        0.7259,
-        0.7215,
-        0.7206,
-        0.7187
+        0.7178,
+        0.7174,
+        0.7148
       ]
     },
     {
@@ -121,11 +121,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7588,
-        0.7262,
+        0.7661,
+        0.7352,
         0.6905,
-        0.6663,
-        0.6613
+        0.6778,
+        0.67
       ]
     },
     {
@@ -142,7 +142,7 @@
       "retrieved_document_ids": [
         "career::knowledge_base",
         "career::knowledge_base",
-        "website::about",
+        "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base"
       ],
@@ -152,11 +152,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7328,
-        0.7159,
-        0.7113,
-        0.6907,
-        0.6891
+        0.739,
+        0.6997,
+        0.697,
+        0.6947,
+        0.6936
       ]
     },
     {
@@ -182,11 +182,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7507,
-        0.7467,
-        0.7452,
-        0.7403,
-        0.7341
+        0.7602,
+        0.7393,
+        0.7341,
+        0.7322,
+        0.728
       ]
     },
     {
@@ -201,7 +201,7 @@
         "website::home"
       ],
       "retrieved_document_ids": [
-        "website::about",
+        "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base",
@@ -213,11 +213,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.6968,
-        0.6914,
-        0.6836,
+        0.6939,
+        0.6865,
         0.668,
-        0.6621
+        0.6679,
+        0.6676
       ]
     },
     {
@@ -231,9 +231,9 @@
         "website::about"
       ],
       "retrieved_document_ids": [
-        "website::about",
-        "website::about",
         "career::knowledge_base",
+        "website::about",
+        "website::about",
         "career::knowledge_base",
         "career::knowledge_base"
       ],
@@ -243,11 +243,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.6977,
+        0.6945,
+        0.6931,
         0.6771,
-        0.6637,
-        0.6607,
-        0.6484
+        0.6683,
+        0.6399
       ]
     },
     {
@@ -272,11 +272,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7832,
-        0.7405,
-        0.701,
-        0.6944,
-        0.6939
+        0.7873,
+        0.752,
+        0.7045,
+        0.7006,
+        0.6956
       ]
     },
     {
@@ -301,11 +301,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7804,
-        0.7762,
-        0.7371,
-        0.7175,
-        0.7024
+        0.7858,
+        0.7828,
+        0.7402,
+        0.7235,
+        0.6849
       ]
     },
     {
@@ -322,8 +322,8 @@
       "retrieved_document_ids": [
         "project::retail-operations::README.md",
         "project::retail-operations::Final_Report.md",
-        "website::projects-retail-demand-forecasting",
         "project::retail-operations::README.md",
+        "project::portfolio-projects::README.md",
         "website::projects-retail-demand-forecasting"
       ],
       "matched_facts": [
@@ -331,10 +331,10 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7968,
-        0.7916,
-        0.7894,
-        0.783,
+        0.7982,
+        0.7846,
+        0.7838,
+        0.782,
         0.7811
       ]
     },
@@ -352,21 +352,21 @@
       ],
       "retrieved_document_ids": [
         "website::projects-credit-risk-pd-model",
+        "website::projects-credit-risk-pd-model",
         "project::credit_risk::README.md",
-        "website::projects-credit-risk-pd-model",
-        "website::projects-credit-risk-pd-model",
-        "website::projects-credit-risk-pd-model"
+        "project::credit_risk::reports/FINAL_REPORT.md",
+        "website::projects"
       ],
       "matched_facts": [
         "credit"
       ],
       "missing_facts": [],
       "top_scores": [
-        0.8284,
-        0.821,
-        0.8176,
-        0.8159,
-        0.8147
+        0.8377,
+        0.8234,
+        0.8227,
+        0.8213,
+        0.8131
       ]
     },
     {
@@ -381,20 +381,20 @@
       "retrieved_document_ids": [
         "career::knowledge_base",
         "career::knowledge_base",
-        "website::projects-credit-risk-pd-model",
-        "website::about",
-        "career::knowledge_base"
+        "career::knowledge_base",
+        "career::knowledge_base",
+        "website::home"
       ],
       "matched_facts": [
         "Never claim formal credit underwriting"
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7428,
-        0.7218,
-        0.7051,
-        0.6904,
-        0.6825
+        0.7494,
+        0.7393,
+        0.738,
+        0.6885,
+        0.6861
       ]
     },
     {
@@ -409,8 +409,8 @@
         "website::projects-retail-allocation-simulator"
       ],
       "retrieved_document_ids": [
-        "website::projects-retail-allocation-simulator",
         "project::retail-allocation-simulator::workflow.md",
+        "website::projects-retail-allocation-simulator",
         "website::projects-retail-allocation-simulator",
         "project::retail-allocation-simulator::README.md",
         "website::projects-retail-allocation-simulator"
@@ -420,11 +420,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.856,
-        0.8508,
-        0.8423,
-        0.8406,
-        0.8404
+        0.8548,
+        0.8545,
+        0.8516,
+        0.8507,
+        0.8296
       ]
     },
     {
@@ -440,7 +440,7 @@
       "retrieved_document_ids": [
         "project::time_series_analysis::README.md",
         "website::projects-time-series-analysis-r",
-        "website::projects-time-series-analysis-r",
+        "project::time_series_analysis::README.md",
         "project::time_series_analysis::README.md",
         "project::time_series_analysis::README.md"
       ],
@@ -449,11 +449,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.8204,
-        0.8064,
-        0.7995,
-        0.7975,
-        0.7953
+        0.822,
+        0.8171,
+        0.799,
+        0.7965,
+        0.7941
       ]
     },
     {
@@ -470,8 +470,8 @@
         "website::projects-black-scholes-options-modeling",
         "website::projects-black-scholes-options-modeling",
         "project::black-scholes-options-modeling::README.md",
-        "website::projects-black-scholes-options-modeling",
-        "project::black-scholes-options-modeling::README.md"
+        "project::black-scholes-options-modeling::README.md",
+        "website::projects-black-scholes-options-modeling"
       ],
       "matched_facts": [
         "Black-Scholes"
@@ -479,10 +479,10 @@
       "missing_facts": [],
       "top_scores": [
         0.8504,
-        0.8438,
-        0.8364,
-        0.8316,
-        0.8272
+        0.8407,
+        0.8278,
+        0.8272,
+        0.826
       ]
     },
     {
@@ -501,18 +501,18 @@
         "project::backtesting-system::README.md",
         "project::backtesting-system::README.md",
         "project::backtesting-system::README.md",
-        "website::projects-backtesting-system"
+        "project::backtesting-system::README.md"
       ],
       "matched_facts": [
         "educational"
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7906,
-        0.7837,
+        0.7734,
         0.7488,
         0.7453,
-        0.7375
+        0.7435,
+        0.7431
       ]
     },
     {
@@ -528,9 +528,9 @@
       ],
       "retrieved_document_ids": [
         "career::knowledge_base",
+        "website::skills",
         "career::knowledge_base",
-        "website::skills",
-        "website::skills",
+        "career::knowledge_base",
         "career::knowledge_base"
       ],
       "matched_facts": [
@@ -538,11 +538,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7852,
-        0.7686,
-        0.7451,
-        0.741,
-        0.7358
+        0.7893,
+        0.7571,
+        0.7441,
+        0.7419,
+        0.7414
       ]
     },
     {
@@ -557,8 +557,8 @@
         "website::home"
       ],
       "retrieved_document_ids": [
-        "career::knowledge_base",
         "website::about",
+        "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base"
@@ -568,11 +568,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.679,
-        0.6709,
-        0.6679,
-        0.6673,
-        0.6635
+        0.6769,
+        0.6759,
+        0.6729,
+        0.6714,
+        0.667
       ]
     },
     {
@@ -590,7 +590,7 @@
         "career::knowledge_base",
         "website::projects-retail-demand-forecasting",
         "website::projects-retail-demand-forecasting",
-        "website::projects-retail-demand-forecasting",
+        "project::retail-operations::README.md",
         "website::projects-retail-demand-forecasting"
       ],
       "matched_facts": [
@@ -598,11 +598,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.8097,
+        0.805,
         0.7761,
-        0.7748,
         0.7693,
-        0.7673
+        0.7664,
+        0.7662
       ]
     },
     {
@@ -627,11 +627,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7984,
-        0.765,
-        0.731,
-        0.7083,
-        0.7053
+        0.8041,
+        0.7706,
+        0.7355,
+        0.7053,
+        0.6964
       ]
     },
     {
@@ -646,7 +646,7 @@
         "website::skills"
       ],
       "retrieved_document_ids": [
-        "website::about",
+        "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base",
@@ -657,10 +657,10 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7602,
-        0.7533,
-        0.7522,
-        0.7323,
+        0.7583,
+        0.7368,
+        0.73,
+        0.7278,
         0.718
       ]
     },
@@ -681,11 +681,11 @@
       "matched_facts": [],
       "missing_facts": [],
       "top_scores": [
-        0.6939,
-        0.6894,
-        0.6865,
-        0.6704,
-        0.6686
+        0.6952,
+        0.6937,
+        0.6897,
+        0.6752,
+        0.6742
       ]
     },
     {
@@ -700,16 +700,16 @@
         "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base",
-        "website::about"
+        "career::knowledge_base"
       ],
       "matched_facts": [],
       "missing_facts": [],
       "top_scores": [
-        0.6587,
-        0.6425,
-        0.6356,
-        0.6349,
-        0.6247
+        0.6784,
+        0.6417,
+        0.6409,
+        0.624,
+        0.6237
       ]
     },
     {
@@ -720,20 +720,20 @@
       "fact_hit": true,
       "expected_document_ids": [],
       "retrieved_document_ids": [
+        "career::knowledge_base",
+        "career::knowledge_base",
         "website::home",
-        "career::knowledge_base",
-        "career::knowledge_base",
         "career::knowledge_base",
         "career::knowledge_base"
       ],
       "matched_facts": [],
       "missing_facts": [],
       "top_scores": [
+        0.5893,
+        0.5831,
         0.5769,
-        0.5767,
-        0.5765,
-        0.5675,
-        0.5659
+        0.5733,
+        0.5729
       ]
     },
     {
@@ -758,11 +758,11 @@
       ],
       "missing_facts": [],
       "top_scores": [
-        0.7936,
-        0.76,
-        0.7577,
-        0.7443,
-        0.7243
+        0.7975,
+        0.7653,
+        0.7499,
+        0.7479,
+        0.7287
       ]
     }
   ],

@@ -61,7 +61,7 @@ Detailed explanation of the Python data pipeline and ingestion rules, covering n
         self.assertEqual(backend_chunk.source_type, "project")
         self.assertTrue(backend_chunk.chunk_id.startswith("test::doc1::c"))
 
-    def test_tiny_section_merging(self):
+    def test_tiny_sibling_sections_keep_their_own_provenance(self):
         doc = """# Main Project
 
 ## Summary
@@ -71,9 +71,10 @@ Short intro.
 Short detail.
 """
         meta = {"document_id": "test::tiny", "title": "Main Project"}
-        # With min_tokens=20, both tiny sub-10 token sections should merge into 1 chunk
         chunks = self.chunker.chunk_document(meta, doc)
-        self.assertEqual(len(chunks), 1)
+        self.assertEqual(len(chunks), 2)
+        self.assertEqual(chunks[0].heading_path, "Main Project > Summary")
+        self.assertEqual(chunks[1].heading_path, "Main Project > Details")
 
     def test_chunking_is_deterministic(self):
         doc = """# Case Study

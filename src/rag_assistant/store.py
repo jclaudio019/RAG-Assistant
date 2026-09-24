@@ -1,4 +1,4 @@
-"""Lightweight persisted vector index for the portfolio corpus (~154 chunks).
+"""Lightweight persisted vector index for the portfolio corpus (hundreds of chunks).
 
 Why numpy + local files:
 - Corpus is tiny; brute-force cosine is transparent and fast enough.

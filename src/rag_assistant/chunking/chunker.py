@@ -134,7 +134,9 @@ class StructureAwareChunker:
                 (document_title, document_title, document_title, pending_prefix.strip())
             )
 
-        # Stage 2: Merge adjacent tiny sections sharing the exact same parent section if < min_tokens
+        # Stage 2: Merge adjacent tiny fragments only when they share the same heading path.
+        # Sibling sections may discuss different topics, so combining them would attach
+        # misleading section provenance to the resulting chunk.
         merged_sections: List[tuple[str, str, str, str]] = []
         for section, parent_sec, heading_path, content in normalized_sections:
             if not merged_sections:
@@ -148,6 +150,7 @@ class StructureAwareChunker:
             # Merge if both are small, share parent, and together don't exceed target tokens
             if (
                 prev_parent == parent_sec
+                and prev_path == heading_path
                 and (prev_tokens < self.config.min_tokens or curr_tokens < self.config.min_tokens)
                 and (prev_tokens + curr_tokens <= self.config.target_tokens)
             ):
