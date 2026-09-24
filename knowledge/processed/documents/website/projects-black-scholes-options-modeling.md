@@ -1,12 +1,12 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Extended a graduate Black-Scholes options-modeling project with live market inputs, GARCH volatility, and an interactive Delta-hedge comparison.
 ---
 
 [Skip to main content](#main-content)
 
 [ All Case Studies](/projects)
 
-05 — Financial Modeling
+06 — Financial Modeling
 
 # Black-Scholes Options Modeling
 
@@ -14,7 +14,17 @@ Extended a graduate Black-Scholes options-modeling project with live market inpu
 
 [ View on GitHub](https://github.com/jclaudio019/black-scholes-options-modeling)
 
-![Black-Scholes Options Modeling project overview](/images/black-scholes-options-modeling-hero.png)
+AAPL call · $195 strike45 days
+
+ModelVol.PriceHedge
+
+Implied24%$4.62\-42
+
+GARCH29%$5.93\-44
+
+Options scenario
+
+How volatility changes price and hedge
 
 Option value and hedge exposure respond to the underlying price, time to expiration, and volatility assumption.
 
@@ -75,7 +85,7 @@ Interactive extension
 
 Compare the same listed option under market-implied and one-day GARCH volatility. Data refreshes only when requested.
 
-SymbolAAPLMSFTSPYOption typeCallPutExpiration2026-08-212026-08-242026-08-262026-08-282026-09-042026-09-112026-09-182026-09-252026-10-022026-10-162026-11-202026-12-182027-01-152027-02-192027-03-192027-06-172027-09-172027-12-172028-01-212028-03-172028-12-15Strike$110$115$120$125$130$135$140$145$150$155$160$165$170$175$180$185$190$195$200$205$210$215$220$225$230$235$240$245$250$255$257.5$260$265$270$275$277.5$280$282.5$285$287.5$290$292.5$295$297.5$300$302.5$305$307.5$310$312.5$315$317.5$320$322.5$325$327.5$330$332.5$335$337.5$340$342.5$345$347.5$350$352.5$355$357.5$360$365$370$375$380$385$390$395$400$405$410$415$420$430$440$450$460$470$480$490$500$510$520$530$540$550$560$570$580$590$600PositionLongShortContract count
+SymbolAAPLMSFTSPYOption typeCallPutExpiration2026-09-252026-09-282026-09-302026-10-022026-10-052026-10-072026-10-092026-10-162026-10-232026-10-302026-11-202026-12-182027-01-152027-02-192027-03-192027-04-162027-06-172027-09-172027-12-172028-01-212028-03-172028-06-162028-12-152029-01-19Strike$110$120$125$130$135$140$145$150$155$160$165$170$175$180$185$190$195$200$205$210$215$220$225$230$235$240$245$250$255$260$265$270$275$277.5$280$282.5$285$287.5$290$292.5$295$297.5$300$302.5$305$307.5$310$312.5$315$317.5$320$322.5$325$327.5$330$332.5$335$337.5$340$342.5$345$347.5$350$352.5$355$357.5$360$362.5$365$370$375$380$385$390$395$400$405$410$415PositionLongShortContract count
 
 Refresh and calculate
 
@@ -107,4 +117,6 @@ It is an educational comparison, not a production pricing system, risk platform,
 
 JavaScriptPythonCloudflare WorkersGARCH
 
-[Next case studyBacktesting System](/projects/backtesting-system)
+[Next case studyWarehouse Club Market Expansion](/projects/warehouse-club-market-expansion)
+
+Ask

@@ -40,7 +40,7 @@ The model answers three main questions:
 
 ## Input workbook
 
-The input workbook contains two tabs.
+The input workbook has two required tabs and two optional control tabs.
 
 ### Control Panel
 
@@ -64,6 +64,10 @@ The Control Panel contains the rules for the allocation run.
 ### Input Data
 
 The Input Data tab contains one row for every store-item combination.
+
+### Item Exclusions and Store Holds
+
+`Item Exclusions` can list Item IDs that must receive zero allocation. `Store Holds` can list a Store ID and Category combination that must receive zero allocation. Both conditions are retained in the reduction audit with an explicit reason.
 
 | Column | Meaning |
 |---|---|
@@ -250,6 +254,10 @@ Common allocation actions include:
 - Reduced Due To Pruning.
 - Set To Zero Due To No Availability.
 - Set To Zero Due To Missing Distribution Center Availability.
+- Set To Zero Due To Item Exclusion.
+- Set To Zero Due To Store Hold.
+
+Item-exclusion and store-hold actions remain in the final allocation so reviewers can distinguish an intentional zero from an availability reduction.
 
 ### Step 9: Availability validation
 
@@ -298,12 +306,13 @@ The summaries show units, shipment value, and store count where applicable.
 | 05 Pruning Pass | Shows complete store allocations removed to meet the dollar target. |
 | 06 Minimum Shipment Summary | Shows store shipment values and minimum-shipment results. |
 | 07 Category Summary | Shows Category A, Category B, and combined target results. |
-| 08 Final Allocation | Shows the final store-item allocation and action for every row. |
-| 09 Availability Validation | Confirms final item allocations do not exceed availability. |
-| 10 Approval Flags | Lists conditions requiring review. |
-| 11 Allocation Summary | Summarizes qualifying units and value by account group and category. |
-| 12 Allocation by Item | Summarizes qualifying units and value by item. |
-| 13 Allocation by Store | Summarizes qualifying units and value by store. |
+| 08 Capacity Validation | Confirms store-category capacity, exemptions, and any corrective reductions. |
+| 09 Final Allocation | Shows the final store-item allocation and action for every row. |
+| 10 Availability Validation | Confirms final item allocations do not exceed availability. |
+| 11 Flags | Lists conditions requiring review. |
+| 12 Order Summary | Summarizes qualifying units and value by account group and category. |
+| 13 Order Summary by Item | Summarizes qualifying units and value by item. |
+| 14 Store Summary | Summarizes qualifying units and value by store. |
 
 ## Worked allocation scenarios
 

@@ -1,197 +1,222 @@
-# Final Report — Retail Demand and POS Forecasting
+# Final Report — Retail Demand Forecasting
 
-## Executive summary
+## Executive Summary
 
-Retail teams need a reliable view of expected daily demand before they can plan staffing, inventory reviews, and other downstream operations. Using recent sales alone can miss recurring weekly patterns, changes in demand level, and known calendar disruptions.
+This project forecasts daily point-of-sale demand for the M5 `FOODS`,
+`HOBBIES`, and `HOUSEHOLD` categories. Models are compared with expanding,
+calendar-aligned validation and then evaluated once on an untouched test year.
 
-This project addresses that forecasting problem for daily point-of-sale unit sales in the `FOODS`, `HOBBIES`, and `HOUSEHOLD` categories. It delivers a leakage-safe category-level demand forecasting process: historical sales are evaluated with expanding-window validation, then pre-specified models are compared once on an untouched 365-day test period.
+Every evaluated alternative improved on the Naive benchmark. The
+validation-selected models produced test WAPE between 8.31% and 10.22%, but the
+results also showed that additional model complexity was not consistently more
+valuable.
 
-Every evaluated alternative improved on the Naive benchmark. The best observed test WAPE by category was:
+The project then extends forecasting into controlled risk analysis. Validation
+forecast errors calibrate historical safety buffers, the final test period
+evaluates those buffers, and Monte Carlo paths examine uncertainty. This
+extension illustrates inventory and service tradeoffs; it does not reproduce
+Walmart's operations or recommend a production policy.
 
-| Category | Best observed test model | Test WAPE | Improvement versus Naive |
-|---|---|---:|---:|
-| FOODS | XGBoost Faster | 10.22% | 5.88 percentage points |
-| HOBBIES | XGBoost Shallow | 8.00% | 9.47 percentage points |
-| HOUSEHOLD | Linear Regression (Full) | 7.05% | 12.83 percentage points |
+## Business Questions
 
-The business takeaway is category-specific: XGBoost achieved the lowest observed error for `FOODS`, but ETS was nearly as accurate with less complexity. For `HOBBIES`, several approaches were effectively tied. For `HOUSEHOLD`, Linear Regression performed best. The project therefore shows that model complexity should be justified by category-level value, not assumed to be better.
+1. How accurately can historical sales forecast future category demand?
+2. Do statistical and machine-learning models improve on simple baselines?
+3. Do forecast errors show consistent direction or timing?
+4. How do historical buffers change service and inventory exposure?
+5. Do those tradeoffs remain similar across alternative demand paths?
 
-## Business questions answered
+## Data and Method
 
-### Can historical POS demand forecast future category demand accurately?
-
-Yes. The Naive model produced test WAPE values of 16.10% for `FOODS`, 17.47% for `HOBBIES`, and 19.88% for `HOUSEHOLD`. Every non-naive approach reduced those errors. Historical demand therefore provides a useful basis for daily category-level forecasting.
-
-### What demand patterns matter?
-
-- Weekly seasonality is clear across all categories, with stronger demand from Friday through Sunday.
-- Christmas Day demand falls to zero or near zero, consistent with store closures. It was retained in the data and treated as a known calendar effect.
-- `FOODS` is relatively stable, `HOBBIES` is more variable, and `HOUSEHOLD` shows the clearest upward movement over time.
-- These patterns justify weekly seasonal baselines, calendar features, lag features, rolling averages, and holiday-aware models.
-
-### Do statistical and machine-learning models improve on simple baselines?
-
-Yes, but the value depends on the category. ETS was the strongest baseline during rolling validation. Linear Regression, Prophet, and XGBoost were then tested using the same 13 expanding monthly validation windows before final test evaluation.
-
-### Is the extra modelling effort worth it?
-
-| Category | Practical assessment |
-|---|---|
-| FOODS | Conditionally. XGBoost had the lowest observed test WAPE, but ETS was only 0.47 WAPE points higher. Use XGBoost when that marginal accuracy gain justifies additional maintenance; otherwise ETS is a credible simpler option. |
-| HOBBIES | Not clearly. XGBoost was lowest, but Prophet and ETS were within 0.12 WAPE points. The small gain alone does not justify a much more complex workflow. |
-| HOUSEHOLD | No. Linear Regression outperformed both Prophet and XGBoost on the test period, so the more complex alternatives did not provide enough value. |
-
-## Method
-
-The M5 Forecasting dataset was aggregated to one daily observation per category:
+The analysis uses M5 item-store-day sales, calendar events, and selling prices.
+Forecasting data is aggregated to one row per category and date:
 
 ```text
 ds | cat_id | y
 ```
 
-The chronological split was fixed before model comparison:
+Only `FOODS`, `HOBBIES`, and `HOUSEHOLD` are modeled.
+
+### Chronological Split
 
 | Period | Dates |
-|---|---|
+| --- | --- |
 | Train | 2011-01-29 to 2014-06-20 |
 | Validation | 2014-06-21 to 2015-06-20 |
 | Test | 2015-06-21 to 2016-06-19 |
 
-Validation used 13 calendar-aligned, expanding windows. Every model was refitted using only the history available before a window. The test set was held out until the final notebook.
+Validation uses 13 expanding windows. Every model is refitted using only the
+history available before its forecast window. Lag and rolling features use
+prior observations, and multi-step feature-based forecasts are recursive.
 
-Model families evaluated:
+WAPE is the primary business-facing metric. MAE and RMSE provide supporting
+error measures.
 
-- Baselines: Naive, Seasonal Naive, 7-Day SMA, and ETS.
-- Linear Regression: lag, rolling, trend, calendar, and Christmas features; both full and reduced versions were tested using permutation importance.
-- Prophet: weekly and yearly seasonality, Christmas as a holiday, and four understandable trend/seasonality settings.
-- XGBoost: the shared lag, rolling, calendar, trend, and holiday feature set with four small parameter configurations.
+### Models
 
-WAPE is the primary business-facing metric because it expresses absolute error relative to total demand. Lower is better. MAE and RMSE were also calculated in the notebooks.
+- Naive
+- Seasonal Naive
+- 7-Day Simple Moving Average
+- Exponential Smoothing
+- Linear Regression
+- Prophet
+- XGBoost
 
-## Final test results
+Models are selected by validation performance only. The selected model for each
+category is refitted on train plus validation and evaluated once on test data.
 
-The table below includes every model evaluated in the final fixed test comparison. These scores are reported transparently, but they were not used to tune any settings after the test was opened.
+## Forecasting Results
 
-| Category | Model | Test WAPE | Effort |
-|---|---|---:|---|
-| FOODS | XGBoost Faster | 10.22% | High |
-| FOODS | ETS | 10.69% | Medium |
-| FOODS | Linear Regression (Reduced) | 11.06% | Medium |
-| FOODS | Prophet Additive | 13.16% | Medium |
-| FOODS | 7-Day SMA | 14.17% | Low |
-| FOODS | Seasonal Naive | 14.61% | Low |
-| FOODS | Naive | 16.10% | Low |
-| HOBBIES | XGBoost Shallow | 8.00% | High |
-| HOBBIES | Prophet Flexible | 8.04% | Medium |
-| HOBBIES | ETS | 8.12% | Medium |
-| HOBBIES | Linear Regression (Full) | 8.78% | Medium |
-| HOBBIES | Seasonal Naive | 9.38% | Low |
-| HOBBIES | 7-Day SMA | 11.60% | Low |
-| HOBBIES | Naive | 17.47% | Low |
-| HOUSEHOLD | Linear Regression (Full) | 7.05% | Medium |
-| HOUSEHOLD | XGBoost Shallow | 7.53% | High |
-| HOUSEHOLD | Prophet Flexible | 8.31% | Medium |
-| HOUSEHOLD | ETS | 8.44% | Medium |
-| HOUSEHOLD | Seasonal Naive | 9.17% | Low |
-| HOUSEHOLD | 7-Day SMA | 14.45% | Low |
-| HOUSEHOLD | Naive | 19.88% | Low |
+### Validation Selection
 
-## Validation selection versus test performance
-
-The validation winners were frozen before test evaluation. Their test errors were higher than validation errors, which is normal for a new out-of-sample period and reinforces why validation and test data must remain separate.
-
-| Category | Validation-selected model | Validation WAPE | Test WAPE |
-|---|---|---:|---:|
+| Category | Selected model | Validation WAPE | Test WAPE |
+| --- | --- | ---: | ---: |
 | FOODS | XGBoost Faster | 6.99% | 10.22% |
 | HOBBIES | Linear Regression (Full) | 6.50% | 8.78% |
 | HOUSEHOLD | Prophet Flexible | 6.88% | 8.31% |
 
-The lowest observed test model differs from the validation-selected model for `HOBBIES` and `HOUSEHOLD`. This is an important finding, not a reason to tune again on the test period. Before changing the validated choice for a live use case, these alternatives should be assessed on a new future holdout period.
+Test errors were higher than validation errors, which reinforces the need for a
+separate final period. The lowest observed test model differed from the selected
+model for `HOBBIES` and `HOUSEHOLD`; those observations were not used to revise
+the earlier selection.
 
-## Operational and financial interpretation
+### Practical Interpretation
 
-Forecast accuracy matters because it changes two operational exposures. For each category-day, the forecast residual is `actual − forecast`:
+| Category | Interpretation |
+| --- | --- |
+| FOODS | XGBoost was strongest, but ETS remained close enough to be a credible simpler option. |
+| HOBBIES | Several models were close, so additional complexity offered limited value. |
+| HOUSEHOLD | Linear Regression had the lowest observed test WAPE, showing that complexity was not automatically better. |
 
-- A positive residual is an under-forecast. If inventory were limited to the forecast, the difference represents demand that could not be filled.
-- A negative residual is an over-forecast. It represents inventory that would remain on hand after demand was met.
+The main forecasting conclusion is category-specific: choose complexity only
+when its incremental accuracy justifies the maintenance cost.
 
-The table below applies that inventory-constrained scenario to the fixed test forecasts. It values units at the daily sales-weighted M5 `sell_price`. The dollar figures are **retail-value exposure**, not realized lost revenue, cash tied up, or profit: the dataset does not contain unit cost, gross margin, inventory availability, carrying cost, markdowns, substitutions, or backorders.
+## Forecast Error and Risk
 
-| Category | Model | Under-forecast units | Under-forecast retail-value exposure | Over-forecast units | Over-forecast retail-value exposure |
-|---|---|---:|---:|---:|---:|
-| FOODS | Naive | 415,148 | $1.09M | 1,150,579 | $3.01M |
-| FOODS | ETS | 830,705 | $2.18M | 209,461 | $0.54M |
-| FOODS | XGBoost Faster | 696,729 | $1.82M | 296,956 | $0.78M |
-| HOBBIES | Naive | 25,534 | $0.11M | 225,804 | $0.96M |
-| HOBBIES | ETS | 96,856 | $0.41M | 20,009 | $0.07M |
-| HOBBIES | XGBoost Shallow | 90,863 | $0.38M | 24,192 | $0.10M |
-| HOUSEHOLD | Naive | 114,353 | $0.46M | 595,585 | $2.30M |
-| HOUSEHOLD | ETS | 241,795 | $0.95M | 59,615 | $0.22M |
-| HOUSEHOLD | Linear Regression (Full) | 132,093 | $0.52M | 119,754 | $0.46M |
-
-These figures show why lower aggregate forecast error is not the whole decision. Naive forecasts leave much more over-forecast retail-value exposure in all three categories, while ETS sharply reduces that exposure but can create more under-forecast retail-value exposure. The best observed model can improve the balance further, but its value is category-specific: for `HOBBIES`, the gap between ETS and XGBoost is small; for `HOUSEHOLD`, Linear Regression materially reduces under-forecast retail-value exposure relative to ETS.
-
-### Category priorities
-
-Average selling price helps put forecast error into business context, but it is not a margin measure. The table uses the same sales-weighted M5 `sell_price` values as the exposure analysis; actual margin, unit cost, and holding cost are not available in the dataset.
-
-| Category | Test-period units | Test-period retail value | Sales-weighted average unit price | Recommended focus |
-|---|---:|---:|---:|---|
-| FOODS | 9.73M | $25.49M | $2.62 | Highest volume and retail-value exposure. ETS is a credible simpler baseline, but its under-forecast and over-forecast trade-off should be optimized with weekday-level buffers before adding more model complexity. |
-| HOBBIES | 1.44M | $6.15M | $4.27 | Highest average selling price, but the observed ETS-to-XGBoost gap is small. Start with ETS and investigate further only if margin, stockout cost, promotions, or seasonal events make the small accuracy gain economically meaningful. |
-| HOUSEHOLD | 3.57M | $14.05M | $3.94 | Strongest candidate for deeper analysis. Linear Regression produces a better observed under-/over-forecast balance than ETS, so this category is worth examining by weekday, event, and high-value item group. |
-
-This suggests a practical next analysis: measure forecast error by weekday and business-critical demand periods, then set category-specific safety buffers from the cost of a stockout relative to the cost of carrying inventory. Where the data supports it, prediction intervals or forecast quantiles can set those buffers more directly than a single point forecast.
-
-In a production setting, the model should be chosen by minimizing total expected economic cost rather than forecast error alone:
+For each day:
 
 ```text
-total forecast economic cost
-= under-forecast units × selling price × lost-sales rate × gross-margin rate
-+ over-forecast units × unit cost × carrying-cost rate × expected holding period
-+ expected markdown or obsolescence cost
+residual = actual - forecast
 ```
 
-This framework turns forecast improvement into an operational decision. It supports category-specific forecast adjustments or safety buffers when the cost of running short is higher than the cost of carrying extra inventory, while keeping those adjustments transparent and measurable.
+A positive residual is an under-forecast; a negative residual is an
+over-forecast. These are forecast-error exposures, not observed stockouts or
+inventory positions.
 
-## What each model contributed
+Final-test residuals showed that `FOODS` and `HOBBIES` under-forecast more often,
+while `HOUSEHOLD` tended to over-forecast. Weekend under-forecast rates were
+also elevated. This means one uniform risk adjustment would not fit all three
+categories.
 
-| Model | What it added | Main limitation |
-|---|---|---|
-| Naive | A simple minimum benchmark. | Ignores weekly patterns, trend, and calendar effects. |
-| Seasonal Naive | Repeats the previous week's day-of-week pattern. | Repeats unusual weeks directly. |
-| 7-Day SMA | A smooth, easy-to-explain demand estimate. | Smooths away important day-of-week variation. |
-| ETS | Level, damped trend, and weekly seasonality with moderate effort. | Does not use explicit calendar or lag features. |
-| Linear Regression | Clear feature effects and an interpretable reduced-feature option. | Assumes linear relationships; recursive forecasts can compound error. |
-| Prophet | Trend, weekly/yearly seasonality, holidays, and uncertainty intervals. | Its additional structure did not consistently improve category-level accuracy. |
-| XGBoost | Non-linear relationships among lag, rolling, and calendar features. | Higher complexity and lower interpretability; marginal gains were category-specific. |
+## Buffer Calibration
+
+Historical buffers are calculated only from the out-of-sample validation
+residuals. Positive cumulative errors are measured across hypothetical 7-, 14-,
+21-, and 28-day lead times, and p90, p95, and p98 quantiles are retained.
+
+Validation-calibrated 14-day buffers were:
+
+| Category | p90 | p95 | p98 |
+| --- | ---: | ---: | ---: |
+| FOODS | 33,496 | 43,550 | 49,009 |
+| HOBBIES | 2,798 | 3,278 | 3,738 |
+| HOUSEHOLD | 8,378 | 10,087 | 12,881 |
+
+The buffers are sample estimates. They are not guaranteed service levels or
+Walmart operating parameters.
+
+## Controlled Inventory Sensitivity
+
+Notebook 09 evaluates the validation-calibrated buffers on the separate test
+period. The deliberately simple policy assumes:
+
+- daily inventory review
+- deterministic hypothetical lead time
+- lost sales when demand exceeds available inventory
+- order-up-to future point forecasts plus safety stock
+- no supplier, case-pack, capacity, cost, or backorder constraints
+
+### Final-Test Results at 14 Days
+
+| Category | Policy | Fill rate | Stockout days | Lost units | Average inventory |
+| --- | --- | ---: | ---: | ---: | ---: |
+| FOODS | none | 94.30% | 166 | 554,257 | 12,256 |
+| FOODS | p95 | 99.07% | 25 | 90,889 | 38,622 |
+| HOBBIES | none | 93.36% | 214 | 95,605 | 1,190 |
+| HOBBIES | p95 | 97.55% | 94 | 35,218 | 2,183 |
+| HOUSEHOLD | none | 99.56% | 32 | 15,626 | 8,126 |
+| HOUSEHOLD | p95 | 100.00% | 0 | 0 | 17,614 |
+
+The validation-calibrated p95 buffer improved test-period service for all three
+categories, but higher service required more average inventory. The improvement
+was largest for `FOODS`; `HOBBIES` remained more exposed than the other
+categories after buffering.
+
+Longer lead times generally required more inventory protection. Demand stress
+also had a large effect: at +20% demand, p95 fill rates fell to 89.05% for
+`FOODS`, 83.13% for `HOBBIES`, and 92.50% for `HOUSEHOLD`.
+
+## Monte Carlo Uncertainty
+
+Validation residuals showed meaningful serial dependence. ACF and Ljung-Box
+diagnostics therefore supported sampling seven-day blocks instead of individual
+days.
+
+Two thousand block-bootstrap residual paths were added to the fixed final-test
+forecast. The same simulated demand path was used for every policy, allowing
+paired comparisons.
+
+### Forecast-Bias Uncertainty
+
+| Category | Validation mean residual | 95% block-bootstrap interval |
+| --- | ---: | --- |
+| FOODS | 564 | [181, 941] |
+| HOBBIES | 40 | [4, 81] |
+| HOUSEHOLD | 261 | [164, 376] |
+
+All three intervals were above zero during validation, although their magnitude
+differed. This describes the historical validation period and does not guarantee
+future bias.
+
+### Simulated Policy Results
+
+| Category | Policy | Mean fill rate | Mean inventory | CVaR95 lost units |
+| --- | --- | ---: | ---: | ---: |
+| FOODS | p90 | 99.81% | 32,570 | 57,421 |
+| FOODS | p95 | 99.95% | 42,089 | 25,839 |
+| FOODS | p98 | 99.98% | 47,449 | 16,186 |
+| HOBBIES | p90 | 99.82% | 3,256 | 5,961 |
+| HOBBIES | p95 | 99.92% | 3,685 | 3,467 |
+| HOBBIES | p98 | 99.97% | 4,119 | 1,946 |
+| HOUSEHOLD | p90 | 99.64% | 7,618 | 27,870 |
+| HOUSEHOLD | p95 | 99.84% | 9,038 | 15,859 |
+| HOUSEHOLD | p98 | 99.97% | 11,642 | 5,655 |
+
+Moving from p90 to p95 improved mean fill rate more than moving from p95 to p98
+for every category. The p95-to-p98 step still reduced tail exposure, showing why
+average service and downside risk can support different decisions.
+
+No buffer is labeled optimal. The project does not have the cost or service
+information required for that conclusion.
+
+## Conclusions
+
+1. Historical demand supports useful daily category forecasts.
+2. More complex models were not consistently better than simpler alternatives.
+3. Validation and test separation prevented model selection from being revised after test results were visible.
+4. Validation residuals could also calibrate historical buffers without using test outcomes.
+5. Those buffers improved service on the independent test period, with a clear inventory tradeoff.
+6. Monte Carlo analysis showed that larger buffers reduced average and tail shortfalls, but with diminishing average-service gains.
 
 ## Limitations
 
-- Forecasts are at the daily category level, not at SKU-store level.
-- The analysis does not model price, promotions, product substitutions, stockouts, or inventory availability as predictive inputs.
-- Recursive multi-day forecasts use earlier predictions to construct later lag and rolling features, so errors can accumulate.
-- The test period is one historical year. Demand changes should be monitored and models should be re-evaluated on future data.
-- This project forecasts demand only. Allocation, replenishment, safety stock, and order recommendations are intentionally out of scope.
+- The analysis covers only three aggregate categories.
+- The test period is one historical year.
+- M5 does not include complete inventory positions or replenishment records.
+- Lead times, starting inventory, ordering mechanics, and lost sales are hypothetical.
+- No margin, holding cost, stockout cost, supplier constraint, or service target is available.
+- Block-bootstrap paths preserve local dependence but do not model structural regime change.
+- Results do not establish causal effects or provide Walmart inventory recommendations.
 
-## Assumptions
-
-- Daily sales can be summed across all items and stores within each category to create a meaningful category-level demand target.
-- Future calendar dates, day of week, month, and Christmas are known when a forecast is made.
-- The 13 expanding validation windows are representative enough to choose model configurations before the final test period.
-- Demand cannot be negative, so negative model predictions were clipped to zero.
-- The four small Prophet and XGBoost configuration sets are sufficient for a portfolio comparison; this is not an exhaustive hyperparameter search.
-- Final test scores are a fixed report of the pre-specified models. They are not used to tune model settings or retroactively change the validation selection rule.
-
-## Notebook map
-
-| Notebook | Contribution |
-|---|---|
-| `00_data_preparation.ipynb` | Joined and validated the M5 analytical data. |
-| `01_data_exploration.ipynb` | Identified category behavior, weekly patterns, and calendar effects. |
-| `02_baseline_forecasting.ipynb` | Established initial benchmark performance. |
-| `03_forecast_validation.ipynb` | Performed expanding-window baseline validation. |
-| `04_linear_regression.ipynb` | Tested interpretable feature-based forecasting and feature reduction. |
-| `05_prophet_model.ipynb` | Tested holiday-aware trend and seasonality forecasting. |
-| `06_xgboost_model.ipynb` | Tested non-linear feature-based forecasting. |
-| `07_model_comparison.ipynb` | Performed the final untouched test evaluation. |
+The project is best interpreted as a forecasting portfolio with a controlled
+decision-sensitivity extension: rigorous enough to show how forecast errors
+matter, but intentionally modest about what the available data can prove.

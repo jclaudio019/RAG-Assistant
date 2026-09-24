@@ -159,23 +159,28 @@ Portfolio work demonstrating time-series analysis, forecasting methodology, mode
 
 Public repository: `jclaudio019/time_series_analysis`
 
-## Credit Risk / Probability of Default Modeling
+## Credit Risk & Portfolio Expected Loss Analytics
 
 Jose has hands-on project exposure to credit-risk modeling, but has **not held a formal Credit Risk Analyst role**.
 
 Project/study experience includes:
 
-- Probability of Default (PD) modeling
-- Logistic regression
-- Lasso regression exposure
-- Feature preparation and selection
-- Scorecard-development concepts
-- Weight of Evidence (WoE) exposure
-- ROC/AUC evaluation
-- Model-performance assessment
-- Credit-risk analysis workshops
+- Probability of Default (PD) modeling and out-of-time evaluation
+- Logistic regression, calibration, and scorecard-development concepts
+- Feature preparation, selection, and Weight of Evidence (WoE)
+- ROC/AUC, KS, Brier score, and model-performance assessment
+- Loss Given Default (LGD) and Exposure at Default (EAD) assumptions
+- Account-level and portfolio-level `Expected Loss = PD × LGD × EAD`
+- Portfolio concentration, stress sensitivity, and Monte Carlo loss simulation
+- Approval-threshold tradeoffs, PSI, and vintage monitoring
+
+The educational portfolio analysis covers **466,285** historical Lending Club loans with **$6.66B** of decision-time exposure. Its reported portfolio expected loss is approximately **$771.6M**, or an **11.6%** EL rate. These are project results from historical public data, not professional underwriting outcomes or a production credit system.
 
 Public repository: `jclaudio019/credit_risk`
+
+Live case study: `https://joseoclaudio.com/projects/credit-risk-pd-model`
+
+Interactive dashboard: `https://joseoclaudio.com/projects/credit-risk-pd-model/dashboard`
 
 ### Important limitation
 Do **not** claim Jose has professionally underwritten borrowers, made formal credit decisions, owned credit policy, worked as a formal model validator, or performed regulatory model validation unless new verified evidence is added.
@@ -227,20 +232,26 @@ Lumina is an ongoing autonomous quantitative-research / intelligence-system proj
 Lumina should be described as an **ongoing personal engineering/research project**, not a production system used by Jose's employer.
 
 ## Portfolio RAG Assistant
-Jose is designing/building a portfolio assistant that uses his resume, website, and showcased project content as grounded knowledge sources.
+Jose built a live portfolio assistant that uses public career information, website pages, and showcased project content as grounded knowledge sources.
 
-Design goals include:
+Implemented capabilities include:
 
 - normalize heterogeneous sources into a common Markdown representation
 - use structure-aware contextual chunking
 - generate embeddings
-- store and retrieve chunks through vector search
-- support hybrid retrieval / reranking where useful
-- require source-grounded answers and citations
+- retrieve chunks through vector search
+- require source-grounded answers and citations with Explore-further links
 - abstain when evidence is insufficient
-- use evaluation questions to measure retrieval and grounded-answer quality
+- distinguish professional experience from portfolio, coursework, and exploratory work
+- evaluate top-five retrieval against a 26-question development set
 - keep ingestion separate from query-time retrieval
-- support incremental indexing through content hashes/change detection
+- support incremental indexing through content hashes and change detection
+
+On the current development benchmark, the expected source and required facts appeared in the top-five retrieved chunks for all **23 answerable questions**. This evaluates retrieval on a small, hand-authored development set; it does not establish perfect answer generation on unseen questions. Hybrid search and reranking remain possible future experiments, not implemented features.
+
+Live assistant: `https://joseoclaudio.com/ask`
+
+Technical case study: `https://joseoclaudio.com/projects/interactive-rag`
 
 ---
 

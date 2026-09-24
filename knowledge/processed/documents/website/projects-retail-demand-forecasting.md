@@ -1,40 +1,50 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Built a leakage-aware demand forecasting workflow, then tested how forecast uncertainty changes service and inventory exposure under controlled policy scenarios.
 ---
 
 [Skip to main content](#main-content)
 
 [ All Case Studies](/projects)
 
-01 — Forecasting
+02 — Forecasting
 
 # Retail Demand Forecasting
 
-Compared forecasting methods for daily retail demand and translated under- and over-forecast errors into retail-value exposure.
+Built a leakage-aware demand forecasting workflow, then tested how forecast uncertainty changes service and inventory exposure under controlled policy scenarios.
 
 [ View on GitHub](https://github.com/jclaudio019/retail-operations)
 
-![Retail Demand Forecasting project overview](/images/retail-demand-forecasting-hero-v2.png)
+Validation-selected test WAPELower is better
 
-Portfolio overview from the project data: headline metrics, category demand over time, and Friday–Sunday seasonality.
+FOODS10.22%
 
-7.05%
+HOBBIES8.78%
 
-Best test WAPE
+HOUSEHOLD8.31%
 
-$3.01M
+Forecast risk & inventory sensitivity
 
-Naive over-forecast retail value\*
+From demand forecast to decision tradeoff
 
-365 days
+Validation-selected forecast accuracy for FOODS, HOBBIES, and HOUSEHOLD, kept separate from post-test model comparisons.
 
-Untouched test period
+10.22%
 
-\*Retail-value exposure for FOODS under a Naive inventory-constrained scenario (sales-weighted sell\_price). Not realized P&L, cash, or profit.
+FOODS test WAPE\*
+
+94.30 → 99.07%
+
+FOODS fill rate\*\*
+
+2,000
+
+Monte Carlo paths
+
+\*Validation-selected XGBoost model on the untouched test year. \*\*Controlled 14-day simulation comparing no buffer with a validation-calibrated p95 buffer; not a production recommendation.
 
 ## Business Problem
 
-Retail teams need a reliable view of daily demand to plan staffing and inventory. Recent sales alone can miss weekly patterns, changes in demand, and calendar events such as Christmas closures. Forecast accuracy also needs to be understood through the operational effects of under- and over-forecasting.
+Retail teams need reliable daily demand forecasts, but point accuracy alone does not show what happens when demand exceeds the forecast or when a buffer is too conservative. The project asks both which models generalize and how forecast uncertainty changes service and inventory exposure under controlled assumptions.
 
 ## Solution
 
@@ -42,19 +52,19 @@ I forecast daily unit sales for FOODS, HOBBIES, and HOUSEHOLD at the category le
 
 I compared simple baselines, linear regression, Prophet, and XGBoost. Models were selected through expanding-window validation and evaluated once on a separate 365-day test period.
 
-I then valued under- and over-forecasts using the sales-weighted selling price. These values represent potential retail exposure, not realized revenue, cash, or profit because unit cost, margin, and carrying cost were not available.
+I analyzed out-of-sample residuals, calibrated historical buffers from validation only, and evaluated simple order-up-to policies once on the untouched test period.
 
-Allocation, replenishment, safety stock, and purchasing recommendations were outside the project scope.
+A block-bootstrap Monte Carlo extension then compared service, average inventory, and tail lost-unit risk across p90, p95, and p98 buffers. These are controlled sensitivity scenarios, not a reconstruction of Walmart's replenishment system.
 
 ## Dataset
 
-The M5 Forecasting dataset (Walmart daily unit sales) was aggregated to one daily observation per category (ds | cat\_id | y). Chronological split: train 2011-01-29 to 2014-06-20, validation 2014-06-21 to 2015-06-20, and test 2015-06-21 to 2016-06-19\. Validation used 13 calendar-aligned expanding windows. Christmas Day demand falls to zero or near zero and was retained as a known calendar effect. Unit residuals on the test period were valued using sales-weighted sell\_price to support the exposure analysis.
+The M5 Forecasting dataset (Walmart daily unit sales) was aggregated to one daily observation per category (ds | cat\_id | y). Chronological split: train 2011-01-29 to 2014-06-20, validation 2014-06-21 to 2015-06-20, and test 2015-06-21 to 2016-06-19\. Validation used 13 calendar-aligned expanding windows. Christmas Day demand falls to zero or near zero and was retained as a known calendar effect. Inventory buffers were calibrated from validation residuals; final policy comparisons used the untouched test period.
 
 ## Methodology
 
-I compared simple baselines with statistical and machine-learning models across 13 expanding validation windows. The selected models were evaluated once on a separate 365-day test period, and forecast errors were valued at the sales-weighted selling price.
+I compared baselines, statistical models, and machine-learning models across 13 expanding validation windows; evaluated the selected model once on a 365-day test period; then connected residual risk to controlled inventory-policy and Monte Carlo sensitivity analyses.
 
-Step-by-step method · 7 steps
+Step-by-step method · 9 steps
 
 * 01Prepared and validated the analytical data, then explored weekly seasonality, category behavior, and calendar effects — including the Friday–Sunday lift and Christmas closures.
 * 02Established Naive, Seasonal Naive, 7-day SMA, and ETS baselines before comparing more complex models.
@@ -62,161 +72,111 @@ Step-by-step method · 7 steps
 * 04Tested Prophet with weekly/yearly seasonality and Christmas as a holiday, plus XGBoost on the shared feature set with small, pre-specified configurations — not an exhaustive hyperparameter search.
 * 05Compared models across 13 expanding monthly validation windows with identical dates, horizons, and metrics (WAPE primary; MAE and RMSE also tracked).
 * 06Froze validation-selected models per category, then evaluated every pre-specified model once on the untouched 365-day test year — with no post-test tuning.
-* 07Translated test residuals into under-forecast and over-forecast unit counts and retail-value exposure, then ranked categories by volume, average selling price, and where deeper analysis would create the most decision value.
+* 07Measured the direction and timing of forecast errors, then calibrated p90, p95, and p98 buffers from out-of-sample validation residuals only.
+* 08Evaluated no-buffer and buffered 14-day order-up-to scenarios on the untouched test year using fill rate, average inventory, lost units, and excess units.
+* 09Ran 2,000 block-bootstrap Monte Carlo paths per category and policy to quantify service, inventory, and tail lost-unit tradeoffs under serially dependent forecast error.
 
 ## Findings
 
-Every evaluated alternative improved on the Naive benchmark. The best observed test WAPE was 10.22% for FOODS with XGBoost, 8.00% for HOBBIES with XGBoost, and 7.05% for HOUSEHOLD with linear regression. No model won every category, and simpler models were often close to the best result. Validation winners also changed on the test period for HOBBIES and HOUSEHOLD, showing why test data must remain separate.
+Validation selected XGBoost Faster for FOODS, Linear Regression for HOBBIES, and Prophet Flexible for HOUSEHOLD; their untouched-test WAPE was 10.22%, 8.78%, and 8.31%. The policy extension shows the operational tradeoff clearly: for FOODS, a validation-calibrated p95 buffer raised test fill rate from 94.30% to 99.07% while average inventory increased from 12,256 to 38,622 units. Monte Carlo results preserve the same pattern across uncertainty paths: higher buffers improve service and reduce tail lost units, but require more inventory.
 
-![Category daily sales \(7-day rolling\) — purple glow marks Dec 25 demand dropping to near zero.](/images/retail-demand-sales-seasonality.png)
+10.22%
 
-Category daily sales (7-day rolling) — purple glow marks Dec 25 demand dropping to near zero.
+FOODS test WAPE
 
-![True demand vs best observed model on the untouched test year — shaded gaps show under- and over-forecast.](/images/retail-demand-actual-vs-forecast.png)
+Validation-selected model
 
-True demand vs best observed model on the untouched test year — shaded gaps show under- and over-forecast.
+94.30 → 99.07%
 
-7.05%
+FOODS fill rate
 
-Best test WAPE
+No buffer → p95 buffer
 
-HOUSEHOLD
+2,000
 
-$3.01M
+Monte Carlo paths
 
-Naive excess exposure
-
-FOODS · retail-value
-
-365
-
-Untouched test days
-
-No post-test tuning
+Per category and policy
 
 FOODSHOBBIESHOUSEHOLD
 
-Category demand (7-day rolling)
+Selected model vs baseline
 
-Full history (2011–2016). Soft purple glow marks Dec 25 — demand collapses to near zero when stores close.
+FOODS · XGBoost Faster was selected on validation (6.99% WAPE), then scored once on the untouched test year. Lower is better.
 
-Dec 25 '11Dec 25 '122014Dec 25 '14Dec 25 '1508.0k16.0k24.0k32.0k
+0%5%10%15%20%NaiveXGBoost Faster
 
-* FOODS
-* HOBBIES
-* HOUSEHOLD
+When the model under-forecast
 
-Model accuracy
+FOODS · share of test days with actual demand above the forecast, grouped by weekday. This is diagnostic evidence, not a service target.
 
-Test WAPE by model · FOODS. Lower is better — best observed model highlighted.
+SunMonTueWedThuFriSat0%25%50%75%100%
 
-0%5%10%18.1%NaiveSeasonal Naive7-Day SMAProphet AdditiveLinear Regression(Reduced)ETSXGBoost Faster
+Controlled policy comparison
 
-Complexity vs value
+FOODS · 14-day order-up-to simulation on the untouched test period. Buffers were calibrated only from validation residuals.
 
-Naive → ETS → best observed model. Additional complexity helped selectively, not everywhere.
+No bufferp95 buffer90%93%96%100%010,00020,00030,00040,000
 
-NaiveETSBest0%5%10%15%20%
+* Average inventory
+* Fill rate (%)
 
-* FOODS
-* HOBBIES
-* HOUSEHOLD
+Uncertainty tradeoff
 
-Actual vs forecast
+FOODS · 2,000 block-bootstrap paths per policy. Higher buffers improve service and reduce tail lost units while increasing inventory.
 
-FOODS · XGBoost Faster — the validation-selected model, shown on the first 120 days of the untouched test year (test WAPE 10.22%). Solid area = true demand; dashed line = forecast.
+p90p95p98015,00030,00045,00060,00099%99.25%99.5%99.75%100%
 
-Jun 21Jul 1Jul 9Jul 18Jul 27Aug 5Aug 15Aug 25Sep 4Sep 13Sep 23Oct 2Oct 1809.5k19.0k28.5k38.0k
+* Average inventory
+* Tail lost units (CVaR95)
+* Mean fill rate (%)
 
-* True demand
-* Forecast
+The inventory analysis is a controlled sensitivity study using hypothetical lead times, buffers, and lost-sales behavior. It illustrates decision tradeoffs; it does not reproduce Walmart's replenishment system or make production inventory recommendations.
 
-Weekly seasonality
+## Forecast Risk & Inventory Sensitivity
 
-Average daily units by weekday (2011–2016). Demand rises into the weekend across all three categories.
+The extension connects forecast quality to a decision without pretending the available data supports a production replenishment recommendation.
 
-MonTueWedThuFriSatSun07.5k15.0k22.5k30.0k
-
-* FOODS
-* HOBBIES
-* HOUSEHOLD
-
-Hover charts for values · category tabs filter accuracy and forecast views
-
-## Operations & Finance
-
-Forecast accuracy matters because it changes two operational exposures. For each category-day, a positive residual (actual − forecast) is an under-forecast: demand that could not be filled if inventory were limited to the forecast. A negative residual is an over-forecast: inventory that would remain after demand was met. The table below applies that inventory-constrained scenario to fixed test forecasts and values units at sales-weighted sell\_price.
-
-These figures show retail-value exposure, not realized lost sales, cash, or profit. Margin, unit cost, carrying cost, and service-level policy were not available.
-
-| Category  | Model                    | Under-forecast retail-value exposure | Over-forecast retail-value exposure |
-| --------- | ------------------------ | ------------------------------------ | ----------------------------------- |
-| FOODS     | Naive                    | $1.09M                               | $3.01M                              |
-| FOODS     | XGBoost Faster           | $1.82M                               | $0.78M                              |
-| HOBBIES   | Naive                    | $0.11M                               | $0.96M                              |
-| HOBBIES   | XGBoost Shallow          | $0.38M                               | $0.10M                              |
-| HOUSEHOLD | Naive                    | $0.46M                               | $2.30M                              |
-| HOUSEHOLD | Linear Regression (Full) | $0.52M                               | $0.46M                              |
-
-Full exposure detail · all models and unit counts
-
-| Category  | Model                    | Under-forecast units | Under-forecast retail-value exposure | Over-forecast units | Over-forecast retail-value exposure |
-| --------- | ------------------------ | -------------------- | ------------------------------------ | ------------------- | ----------------------------------- |
-| FOODS     | Naive                    | 415,148              | $1.09M                               | 1,150,579           | $3.01M                              |
-| FOODS     | ETS                      | 830,705              | $2.18M                               | 209,461             | $0.54M                              |
-| FOODS     | XGBoost Faster           | 696,729              | $1.82M                               | 296,956             | $0.78M                              |
-| HOBBIES   | Naive                    | 25,534               | $0.11M                               | 225,804             | $0.96M                              |
-| HOBBIES   | ETS                      | 96,856               | $0.41M                               | 20,009              | $0.07M                              |
-| HOBBIES   | XGBoost Shallow          | 90,863               | $0.38M                               | 24,192              | $0.10M                              |
-| HOUSEHOLD | Naive                    | 114,353              | $0.46M                               | 595,585             | $2.30M                              |
-| HOUSEHOLD | ETS                      | 241,795              | $0.95M                               | 59,615              | $0.22M                              |
-| HOUSEHOLD | Linear Regression (Full) | 132,093              | $0.52M                               | 119,754             | $0.46M                              |
-
-[Full report and code ](https://github.com/jclaudio019/retail-operations)
-
-Naive forecasts create much more over-forecast retail-value exposure in every category. Better models reduce that amount but can increase under-forecast retail-value exposure, so model comparisons should consider both sides instead of WAPE alone. For HOBBIES, ETS and XGBoost are close. For HOUSEHOLD, linear regression produces a better balance than ETS.
-
-Average selling price helps put error into business context (it is not a margin measure). Categories differ in volume, retail value, and where deeper work is worth the effort:
-
-| Category  | Test units | Retail value | Avg unit price | Recommended focus                                                                                                                                |
-| --------- | ---------- | ------------ | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| FOODS     | 9.73M      | $25.49M      | $2.62          | Highest volume and retail-value exposure. ETS is a strong simple baseline; review weekday buffers before adding complexity.                      |
-| HOBBIES   | 1.44M      | $6.15M       | $4.27          | Highest average selling price, but ETS≈XGBoost. Dig deeper only if margin, stockout cost, or promotions make the small accuracy gain meaningful. |
-| HOUSEHOLD | 3.57M      | $14.05M      | $3.94          | Strongest candidate for deeper analysis — better observed balance than ETS, worth weekday/event/high-value item review.                          |
+* Model choice remains validation-driven: the lowest observed test score is reported separately and never used to choose the winner.
+* Buffers are calibrated from validation residuals, then evaluated once on final test data.
+* The Monte Carlo layer preserves forecast-error blocks so uncertainty paths retain short-run dependence instead of treating every day as independent.
+* Service gains are shown beside the inventory required to obtain them; no single buffer is presented as universally optimal.
 
 ## Business Implications
 
-Forecast accuracy is only part of the decision. Under-forecasts can mean missed demand, while over-forecasts can leave excess product on the shelf. A production decision should compare those costs by category and use different buffers when running short is more expensive than carrying extra inventory.
+The project demonstrates a complete analytical chain: validate the demand model, diagnose residual risk, test a transparent policy under fixed assumptions, and quantify uncertainty. The result is decision support rather than a false claim of optimization: stakeholders can see what service improvement costs in additional inventory and where tail risk remains.
 
 ## Conclusion
 
 Historical sales can forecast category demand more accurately than simply using recent sales, but the best method depends on the category.
 
-The project compares baseline, statistical, and machine-learning models, evaluates them on separate test data, and translates errors into potential retail exposure so operations and finance can discuss the same result.
+The project compares baseline, statistical, and machine-learning models, evaluates validation-selected models on separate test data, and carries their residual uncertainty into controlled inventory scenarios.
 
-The practical next step is to keep simpler models when results are close, review HOUSEHOLD in more detail, and set category buffers based on the cost of stockouts versus excess inventory.
+The strongest portfolio lesson is not that one buffer wins. It is that model governance, error diagnosis, policy assumptions, and uncertainty must remain visible from forecast to decision.
 
 ## Worth Digging Deeper
 
-* 01Measure forecast error by weekday and business-critical demand periods, then set category-specific safety buffers from stockout cost versus carrying cost.
-* 02Where the data supports it, add prediction intervals or forecast quantiles so buffers are probabilistic rather than ad hoc point-forecast padding.
+* 01Compare historical residual buffers with conformal intervals or forecast quantiles using the same validation-only calibration rule.
+* 02Stress-test alternative lead times and review periods instead of treating the illustrative 14-day setting as fixed.
 * 03Drill into high-value item groups within HOUSEHOLD (and price-sensitive pockets of HOBBIES) where average selling price makes residual error more expensive.
 * 04If unit cost, margin, and holding-cost inputs become available, replace retail-value exposure with a true expected economic-cost objective for model selection.
-* 05Extend beyond category-level demand into allocation / replenishment only after the demand signal and its uncertainty are stable enough to trust.
+* 05Extend to SKU-store allocation only when inventory positions, unit economics, substitutions, and operational constraints are available.
 
 ## Limitations
 
 * Forecasts are at the daily category level, not SKU-store level.
 * Price, promotions, substitutions, stockouts, and inventory availability were not modeled as predictive inputs.
-* Dollar exposure uses sell\_price retail value — not unit cost, margin, carrying cost, or realized P&L.
+* Lead times, safety buffers, lost-sales behavior, and order-up-to logic are hypothetical analytical assumptions.
 * Recursive multi-day forecasts can accumulate error through lag and rolling features.
 * The test period is one historical year; demand changes should be monitored on future data.
-* Allocation, replenishment, safety stock, and order recommendations were intentionally out of scope.
+* The project does not reproduce Walmart's replenishment system or make production purchasing, allocation, or inventory recommendations.
 
 ## Technologies
 
 PythonpandasstatsmodelsProphetXGBoostscikit-learn
 
-[Next case studyCredit Risk Probability of Default](/projects/credit-risk-pd-model)
+[Next case studyCredit Risk Decision & Portfolio Analytics](/projects/credit-risk-pd-model)
 
-7.5k
+Ask
+
+99%

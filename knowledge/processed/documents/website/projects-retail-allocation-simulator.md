@@ -1,12 +1,12 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Automates weekly store-item allocation so limited inventory follows consistent business rules and every recommendation can be reviewed in Excel.
 ---
 
 [Skip to main content](#main-content)
 
 [ All Case Studies](/projects)
 
-03 — Retail Operations
+04 — Retail Operations
 
 # Retail Allocation Simulator
 
@@ -14,7 +14,7 @@ Automates weekly store-item allocation so limited inventory follows consistent b
 
 [ View on GitHub](https://github.com/jclaudio019/retail-allocation-simulator)
 
-![Retail Allocation Simulator project overview](/images/retail-allocation-simulator-hero.png)
+![Retail Allocation Simulator](/images/retail-allocation-simulator-hero.png)
 
 A distribution-center-to-store flow represents the allocation decision itself—not a forecast or an optimization claim.
 
@@ -26,7 +26,7 @@ Store-item rows
 
 Fictional stores
 
-13
+14
 
 Audit tabs
 
@@ -38,9 +38,9 @@ When available inventory cannot satisfy every suggested store order, a retailer 
 
 ## Solution
 
-The simulator evaluates one weekly allocation snapshot and classifies each item as balanced, short, or available for an increase. It then applies explicit rank, inventory, sales, capacity, line-limit, shipment, and optional dollar-target rules to produce a final recommendation.
+The simulator evaluates one weekly allocation snapshot, applies optional item exclusions and store holds, and classifies each item as balanced, short, or available for an increase. It then applies explicit rank, inventory, sales, capacity, line-limit, shipment, and optional dollar-target rules to produce a final recommendation.
 
-The result is an Excel workbook with the final allocation, inventory checks, approval flags, and supporting tabs. Reviewers can see why units were added, reduced, retained, or excluded without relying on an unexplained score.
+The result is an Excel workbook with the final allocation, availability and capacity checks, approval flags, and supporting tabs. Reviewers can see why units were added, reduced, retained, excluded, or held without relying on an unexplained score.
 
 The project intentionally stops at allocation. It does not forecast demand, determine purchasing quantities, optimize transportation, or represent a production deployment.
 
@@ -50,15 +50,16 @@ The included large weekly example contains 325,000 unique store-item rows across
 
 ## Methodology
 
-The simulator validates weekly inputs, classifies item availability, applies reduction or increase rules, checks operating limits, and records each decision in a 13-tab Excel workbook.
+The simulator validates weekly inputs, applies exclusions and holds, classifies item availability, adjusts allocations, verifies store-category capacity, and records each decision in a 14-tab Excel workbook.
 
-Step-by-step method · 5 steps
+Step-by-step method · 6 steps
 
-* 01Validate the control panel and store-item input for required fields, unique keys, numeric values, and supported operating modes.
+* 01Validate the control panel and store-item input for required fields, unique keys, numeric values, and supported operating modes; optional item-exclusion and store-hold tabs identify intentional zero allocations.
 * 02Compare suggested orders with distribution-center availability to identify balanced items, shortages, and inventory that may be allocated.
-* 03Reduce short items using current inventory, store rank, and recent sales-based priority rather than arbitrary cuts.
-* 04Add eligible units only while store capacity, item availability, line limits, minimum-shipment requirements, and target controls permit them.
-* 05Write the final recommendation, availability checks, approval flags, and allocation summaries to an ordered 13-tab workbook for review.
+* 03Reduce short items using current inventory, store rank, and recent sales-based priority, while restoring capacity when units are removed.
+* 04Add eligible units one at a time only while remaining store-category capacity, item availability, line limits, minimum-shipment requirements, and target controls permit them.
+* 05Run a final capacity-validation check against the original projected store-category inventory, preserving documented exemptions and correcting non-exempt overages.
+* 06Write the final recommendation, capacity and availability checks, review flags, and allocation summaries to an ordered 14-tab Excel workbook.
 
 ## AI-Assisted Development
 
@@ -68,7 +69,7 @@ The simulator remains a rule-based analytical workflow, not a generative-AI prod
 
 ## Findings
 
-The simulator shows that weekly allocation can be handled with visible business rules and checked from input to final recommendation. The examples cover shortages, extra availability, capacity limits, shipment minimums, targets, validation, and approval flags. They demonstrate how the process works rather than claiming a measured sales or inventory improvement.
+The simulator shows that weekly allocation can be handled with visible business rules and checked from input to final recommendation. The examples cover shortages, extra availability, item exclusions, store holds, capacity parity, shipment minimums, targets, validation, and review flags. They demonstrate how the process works rather than claiming a measured sales or inventory improvement.
 
 ## Business Implications
 
@@ -92,3 +93,5 @@ Production use would require live-system integration, monitoring, controls, and 
 PythonpandasExcelXlsxWriterpytest
 
 [Next case studyTime-Series Analysis & Forecasting in R](/projects/time-series-analysis-r)
+
+Ask

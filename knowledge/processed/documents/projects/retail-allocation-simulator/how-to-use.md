@@ -6,10 +6,15 @@ Use this guide to prepare a weekly allocation workbook, run the model, and revie
 
 ## Prepare the input workbook
 
-The input workbook must contain exactly two tabs:
+The input workbook must contain two required tabs:
 
 1. `Control Panel`
 2. `Input Data`
+
+It can also include these optional control tabs:
+
+3. `Item Exclusions`
+4. `Store Holds`
 
 Use the public input schema and controls described in [workflow.md](workflow.md). The model reads the workbook without changing the original suggested order values.
 
@@ -35,9 +40,10 @@ Replace those example paths with your own workbook paths when you are ready to p
 
 Start with these tabs:
 
-1. `08 Final Allocation` for the recommended store-item orders and allocation actions.
-2. `09 Availability Validation` to confirm item allocations do not exceed available inventory.
-3. `10 Approval Flags` to identify conditions that require review.
+1. `09 Final Allocation` for the recommended store-item orders and allocation actions. Intentional zeroes are labelled `Set To Zero Due To Item Exclusion` or `Set To Zero Due To Store Hold`.
+2. `10 Availability Validation` to confirm item allocations do not exceed available inventory.
+3. `11 Flags` to identify conditions that require review.
+4. `08 Capacity Validation` to confirm store-category capacity and exemptions.
 
 Then use the remaining audit tabs to trace how the recommendation was created. [workflow.md](workflow.md) explains each tab and the three common allocation scenarios.
 

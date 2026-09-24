@@ -1,12 +1,12 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Used R to simulate time-series behavior and build 24-month forecasts for U.S. unemployment and the S&amp;P 500.
 ---
 
 [Skip to main content](#main-content)
 
 [ All Case Studies](/projects)
 
-04 — Applied Statistics
+05 — Applied Statistics
 
 # Time-Series Analysis & Forecasting in R
 
@@ -14,7 +14,9 @@ Used R to simulate time-series behavior and build 24-month forecasts for U.S. un
 
 [ View on GitHub](https://github.com/jclaudio019/time%5Fseries%5Fanalysis)
 
-![Time-Series Analysis & Forecasting in R project overview](/images/time-series-analysis-r-hero.png)
+Brownian bridge
+
+A path that starts and returns to zero
 
 Historical patterns lead into several possible future paths, showing seasonality, dependence over time, and forecast uncertainty.
 
@@ -83,7 +85,7 @@ U.S. Unemployment
 
 Month
 
-6193348637791106121136151166181196211227\-404812
+315284154688194108123138153168183197212227\-404812
 
 Unemployment rate · dashed line marks the forecast boundary
 
@@ -109,5 +111,7 @@ The GitHub repository also includes six coursework notebooks covering stationari
 RJupyterastsaARIMAForecasting
 
 [Next case studyBlack-Scholes Options Modeling](/projects/black-scholes-options-modeling)
+
+Ask
 
 \-4

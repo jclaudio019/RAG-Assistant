@@ -1,77 +1,166 @@
-# Credit Risk Probability-of-Default Analysis
+# Credit Risk & Portfolio Expected Loss Analytics
 
-Can historical borrower and loan characteristics rank observed credit risk,
-and can that model output be translated into an interpretable score? This
-educational, notebook-led analysis answers that question with an illustrative
-probability-of-default (PD) workflow, not a lending decision system or
-production credit model.
+## Why I Built This
 
-## Headline evidence
+I started this project to understand how lenders estimate borrower default risk.
+That quickly exposed a more interesting question: even if a model can rank who is
+more likely to default, how does that become a useful view of financial risk across
+an entire loan portfolio?
 
-- 466,285 historical loan records across the train/test population.
-- Held-out AUC: **0.699482**; Gini: **0.398964**; KS: **0.291652**.
-- An illustrative **300–850** scorecard communicates relative model risk.
+To explore that question, I expanded the analysis from probability of default (PD)
+into loss given default (LGD), exposure at default (EAD), expected loss (EL),
+portfolio concentration, stress sensitivities, Monte Carlo loss distributions, and
+risk-appetite tradeoffs:
 
-Read the full [portfolio case](Final_Report.md) and inspect the lightweight
-[model artifacts](model/README.md).
+**PD → LGD → EAD → Expected Loss → portfolio behavior → stress → loss distribution
+→ risk appetite**
 
-The historical target is `good_bad`: `0` for the listed bad loan statuses
-(`Charged Off`, `Default`, policy charged-off, and late 31–120 day loans), and
-`1` for all other observed statuses. The model estimates probability of good standing, `P(good)`. PD is calculated only afterwards as `1 - P(good)`; the two should not be treated as the same quantity.
+This is an **educational portfolio project**. It is not a production underwriting
+system, regulatory capital model, accounting ECL implementation, or live credit
+decision engine.
 
-## Workflow
+## What I Wanted to Learn
 
-Run the notebooks in order.
+- How should default probabilities be evaluated when they feed loss calculations?
+- Why are discrimination and calibration different?
+- How do PD, LGD, and EAD interact at account and portfolio level?
+- Where does expected loss concentrate relative to exposure?
+- What happens when risk assumptions deteriorate?
+- How variable can realized portfolio losses become?
+- How does a PD cutoff change approved exposure and expected loss?
 
-| Notebook | Purpose |
+## What I Found
+
+All headline values below come from
+[`reports/final_metrics.json`](reports/final_metrics.json).
+
+- **PD performance:** the selected logistic model achieved **0.669 OOT ROC AUC**
+  (95% bootstrap CI **0.665–0.672**) and **0.245 KS** on the 2014 vintage.
+- **Calibration:** OOT Brier score improved from **0.242** for the raw probabilities
+  to **0.075** after isotonic calibration.
+- **Portfolio expected loss:** **$771.6M** on **$6.66B** of exposure, an EL rate of
+  **11.6%**, across **466,285** historical loans.
+- **Concentration:** grade **C** contributed about **28.1%** of EL versus **26.7%**
+  of exposure. Grade **A** represented about **15.0%** of exposure but **5.3%** of EL.
+- **Stress sensitivity:** mild assumptions increased EL by **39.3%**; severe
+  assumptions increased it by **103.3%**.
+- **Loss simulation:** the independent Monte Carlo mean reconciled to analytical EL
+  within **0.002%**. On a matched subsample, assumed default correlation of 0.12
+  roughly doubled VaR95 relative to independence.
+- **Risk appetite:** on the OOT sample, PD ≤ 10% produced **41.1%** approval and a
+  **5.7%** approved-book EL rate; PD ≤ 20% produced **87.6%** approval and a
+  **9.9%** EL rate.
+
+## What I Learned
+
+- AUC measures ranking, not whether predicted probabilities are numerically reliable.
+- Calibration matters when PD is multiplied into a financial loss calculation.
+- Borrower risk alone does not determine portfolio loss; exposure, severity, and
+  segment size can change the portfolio interpretation.
+- Random train/test splits can look more representative than a temporal out-of-time
+  test. The older scorecard path and the newer OOT pipeline are kept separate for
+  that reason.
+- Stress scenarios are explicit sensitivities, not forecasts.
+- A risk-appetite threshold is a business tradeoff. Without credible pricing and
+  cost data, there is no honest single “optimal” cutoff.
+
+## How I Approached It
+
+1. Ingest the Lending Club extract once into DuckDB and validate the raw data.
+2. Preserve the original hands-on PD/WoE/scorecard notebook sequence.
+3. Build a leakage-controlled temporal PD pipeline and compare logistic regression
+   with a boosting challenger.
+4. Calibrate the selected model on the validation vintage and evaluate it OOT.
+5. Estimate empirical LGD, define a decision-time EAD proxy, and calculate
+   account-level `EL = PD × LGD × EAD`.
+6. Aggregate expected loss by grade, purpose, geography, risk band, and vintage.
+7. Explore stress sensitivities, independent and correlated-default simulations,
+   monitoring concepts, and approval-threshold tradeoffs.
+
+The final methodology and assumptions are documented in
+[`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) and
+[`docs/ASSUMPTIONS_AND_LIMITATIONS.md`](docs/ASSUMPTIONS_AND_LIMITATIONS.md).
+
+## Explore the Analysis
+
+The notebooks are the main learning product. Their full sequence and calculation
+lineage are in [`docs/NOTEBOOK_GUIDE.md`](docs/NOTEBOOK_GUIDE.md).
+
+- Start with [`15_executive_summary.ipynb`](notebooks/15_executive_summary.ipynb)
+  for the complete case-study walkthrough.
+- Read notebooks `00`–`05` for the original PD, WoE, logistic-regression, and
+  scorecard development path.
+- Read notebooks `06`–`14` for temporal validation, calibration, LGD, EAD,
+  expected loss, portfolio analysis, stress, simulation, thresholds, and monitoring.
+- See [`reports/FINAL_REPORT.md`](reports/FINAL_REPORT.md) for the detailed report.
+- See [`docs/PORTFOLIO_CASE_STUDY.md`](docs/PORTFOLIO_CASE_STUDY.md) for the concise
+  public case study.
+- View the [live portfolio presentation](https://joseoclaudio.com/projects/credit-risk-pd-model).
+- Open the [interactive credit-risk dashboard](https://joseoclaudio.com/projects/credit-risk-pd-model/dashboard)
+  for the calibrated PD, out-of-time model performance, expected loss, portfolio
+  concentration, Monte Carlo loss distribution, stress sensitivity, approval
+  thresholds, PSI, and vintage-monitoring views.
+
+## Technical Implementation
+
+The repository uses DuckDB as the durable analytical store. The raw CSV is read only
+during ingestion; active notebooks and pipeline stages use DuckDB tables rather than
+CSV or pickle intermediates. Reusable Python code supports reproducibility, while the
+notebooks retain the explanations and visible calculations needed to understand the
+methods.
+
+| Path | Purpose |
 | --- | --- |
-| `00_data_understanding_and_preparation.ipynb` | Establishes the source fields, data quality context, and deterministic date conversions. |
-| `01_data_cleaning_and_target_definition.ipynb` | Defines the historical target, applies partition-aware repairs, and creates the train/test split. |
-| `02_discrete_feature_engineering_and_woe.ipynb` | Investigates discrete variables with train-derived WoE/IV and category groupings. |
-| `03_continuous_feature_engineering_and_woe.ipynb` | Performs fine/coarse classing for ordered and continuous predictors. |
-| `04_pd_logistic_regression_and_validation.ipynb` | Fits logistic specifications for `P(good)` and evaluates held-out discrimination and thresholds. |
-| `05_pd_scorecard_and_final_conclusions.ipynb` | Builds the illustrative 300–850 scorecard and interprets held-out account scores. |
+| `notebooks/` | Step-by-step analytical narrative and final walkthrough |
+| `src/credit_risk/` | Reusable modeling, portfolio, monitoring, and scoring code |
+| `sql/` | DuckDB quality, cleaning, feature, and portfolio transformations |
+| `data/` | Local raw input and gitignored canonical DuckDB store |
+| `reports/` | Canonical metrics, figures, and detailed report |
+| `docs/` | Methodology, assumptions, notebook guide, data dictionary, and traceability |
+| `tests/` | Material analytical, pipeline, scoring, and export checks |
+| `portfolio_export/` | Deterministic JSON used by the separate portfolio website |
 
-## Methodology
+### Reproduce the analysis
 
-The workflow begins with data understanding, deterministic cleaning, and the
-historical target definition. It then uses a stratified 80/20 train/test split,
-with imputation statistics, category definitions, and feature bins learned
-from training rows and applied unchanged to held-out rows.
+Use Python 3.11 or newer, place `loan_data_2007_2014.csv` under `data/`, then run:
 
-Weight of Evidence (WoE) examined risk ordering and similarity across
-categories and intervals, informing category grouping and coarse classing.
-Information Value (IV) summarized feature separation strength as a descriptive
-diagnostic, not an automatic feature-selection rule. The logistic regression
-used one-hot grouped categories, not numeric WoE values; after the initial
-full-rank model, consistently non-significant feature families were removed,
-with explicit reference categories preserving interpretability. The notebooks
-report coefficients, probability interpretation, held-out threshold behavior,
-ROC/AUC, Gini, KS, and an illustrative 300–850 scorecard. The model estimates
-`P(good)` and calculates PD explicitly as `1 - P(good)`.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+make end-to-end
+```
 
-The illustrative score scale is derived from the theoretical per-family
-minimum and maximum model coefficients, including the intercept, rather than
-from the observed training-score distribution.
+`make end-to-end` ingests the raw data, executes notebooks `00`–`05`, runs the
+reusable pipeline, rebuilds the reported metrics, executes notebooks `06`–`15`, and
+runs the test suite. Individual commands remain available in the `Makefile`.
 
-## Reproducibility
+### Model scoring
 
-1. Obtain the historical Lending Club CSV and place it at
-   `data/loan_data_2007_2014.csv`.
-2. Create an environment and install `pip install -r requirements.txt`.
-3. Run the six notebooks above in numerical order from the `notebooks/`
-   directory so their relative data path resolves.
+The final notebook shows how a borrower record is transformed and scored with the
+frozen feature builder, calibrated model, and transparent expected-loss identity.
+The scoring calculation remains part of the analysis without adding an unused web
+service or presenting the project as a backend platform.
 
-The source dataset is local and is not included in this repository. See
-[`data/README.md`](data/README.md) for the expected location.
+### Portfolio presentation export
+
+```bash
+make portfolio-export
+```
+
+This produces deterministic, chart-ready JSON for the separate portfolio website.
+The export is a downstream presentation artifact and is never an analytical input.
 
 ## Limitations
 
-- `good_bad` is a simplified historical bad-status proxy, not a fixed
-  performance-horizon default definition or current underwriting rule.
-- The random holdout is useful for this exercise but does not establish
-  time-based stability, calibration, fairness, or regulatory suitability.
-- The 300–850 scale is illustrative, not a production scorecard calibration or
-  lending policy.
-- Historical Lending Club data may not represent a current portfolio or lending
-  environment.
+- The target is a status-based default proxy rather than a fixed performance horizon.
+- The 2014 OOT vintage is under-seasoned in the historical snapshot.
+- LGD uses incomplete, undiscounted public recovery fields.
+- EAD is approximated by funded amount at decision time.
+- Stress scenarios are sensitivities rather than macroeconomic forecasts.
+- Correlated-default simulation uses a simplified one-factor assumption on a sample.
+- The threshold analysis lacks full revenue, funding-cost, and operational-cost data.
+
+With better data, I would add horizon-aligned outcomes, recovery cash-flow timing,
+event-time balances, macroeconomic drivers, pricing economics, and live outcome
+feedback for monitoring and recalibration.

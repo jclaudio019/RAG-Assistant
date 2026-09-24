@@ -4,17 +4,53 @@ description: Portfolio of Jose Claudio, an analytics professional combining fore
 
 [Skip to main content](#main-content)
 
-Forecasting, Modeling, Automation & Business Decision Support
+AI-Enabled Analytics, Modeling, Automation & Decision Support
 
 # In a world full of answers,the right solution begins with the right question.
 
-I am an analytics professional with more than five years of experience across finance, supply chain, and inventory planning. I combine programming, forecasting, statistical methods, and business context to support practical, data-informed decisions.
+I am an analytics professional with more than five years of experience across finance, supply chain, and inventory planning. I combine forecasting, statistical modeling, automation, and business context to turn practical questions into validated decision support.
 
-I am currently pursuing an M.S. in Applied Statistics at Purdue University to deepen my understanding of modeling, uncertainty, and the questions behind the data.
+I decide what problem to solve, where a process can improve, and what judgment must remain human. I use AI and software for repetitive and computational heavy lifting, creating more time for root-cause analysis, business context, and the people affected by the decision.
 
-[View Portfolio](/projects)[ Resume](/resume)
+[Ask the portfolio](/ask)[View Portfolio](/projects)[ Resume](/resume)
 
 Forecasting✳Statistical Modeling✳Python✳SQL✳Machine Learning✳Decision Support✳Reporting Automation✳Inventory Analysis✳Finance✳Supply Chain✳Power BI✳Applied Statistics✳Forecasting✳Statistical Modeling✳Python✳SQL✳Machine Learning✳Decision Support✳Reporting Automation✳Inventory Analysis✳Finance✳Supply Chain✳Power BI✳Applied Statistics✳
+
+Discovery
+
+## Ask questions. Get linked to the right work.
+
+A grounded portfolio assistant that synthesizes public evidence across experience, projects, and methods — then points you to the pages worth opening next.
+
+[Open portfolio assistant](/ask)[Technical RAG case study →](/projects/interactive-rag)
+
+How I work
+
+## Analysis first. AI used to extend what the work can become.
+
+01
+
+### Analyze
+
+Understand the business question, the people involved, and where a process or decision can genuinely improve.
+
+02
+
+### Validate
+
+Challenge assumptions, prevent leakage, test generalization, quantify uncertainty, and audit whether results support the claim.
+
+03
+
+### Automate
+
+After the logic and controls are understood, let computers handle repeatable analysis, reporting, and quality checks.
+
+04
+
+### Communicate
+
+Use AI-assisted visuals, diagrams, dashboards, and storytelling to make model behavior and decision tradeoffs understandable.
 
 Portfolio
 
@@ -22,20 +58,46 @@ Portfolio
 
 [View all case studies →](/projects)
 
-[01 / Forecasting![Retail Demand Forecasting](/images/retail-demand-forecasting-hero-v2.png)Retail Demand ForecastingCompared forecasting methods for daily retail demand and translated under- and over-forecast errors into retail-value exposure.PythonpandasstatsmodelsProphet](/projects/retail-demand-forecasting)
+[01 / ForecastingValidation-selected test WAPELower is betterFOODS10.22%HOBBIES8.78%HOUSEHOLD8.31%Forecast risk & inventory sensitivityFrom demand forecast to decision tradeoffRetail Demand ForecastingBuilt a leakage-aware demand forecasting workflow, then tested how forecast uncertainty changes service and inventory exposure under controlled policy scenarios.Pythonpandasstatsmodels](/projects/retail-demand-forecasting)
 
-[02 / Credit Risk Modeling![Credit Risk Probability of Default](/images/credit-risk-pd-model-hero-v2.png)Credit Risk Probability of DefaultBuilt an interpretable historical risk-ranking model and illustrative scorecard using Lending Club loan outcomes.PythonpandasNumPystatsmodels](/projects/credit-risk-pd-model)
+02 / Credit Risk ModelingInteractive
 
-[03 / Retail Operations![Retail Allocation Simulator](/images/retail-allocation-simulator-hero.png)Retail Allocation SimulatorAutomates weekly store-item allocation so limited inventory follows consistent business rules and every recommendation can be reviewed in Excel.PythonpandasExcelXlsxWriter](/projects/retail-allocation-simulator)
+Sample inputs
 
-[04 / Applied Statistics![Time-Series Analysis & Forecasting in R](/images/time-series-analysis-r-hero.png)Time-Series Analysis & Forecasting in RUsed R to simulate time-series behavior and build 24-month forecasts for U.S. unemployment and the S&P 500.RJupyterastsaARIMA](/projects/time-series-analysis-r)
+Grade
 
-[05 / Financial Modeling![Black-Scholes Options Modeling](/images/black-scholes-options-modeling-hero.png)Black-Scholes Options ModelingExtended a graduate Black-Scholes options-modeling project with live market inputs, GARCH volatility, and an interactive Delta-hedge comparison.JavaScriptPythonCloudflare WorkersGARCH](/projects/black-scholes-options-modeling)
+C
 
-[06 / Financial Systems![Backtesting System](/images/backtesting-system-hero.png)Backtesting SystemConnected two graduate coursework assignments into a documented workflow spanning historical backtesting and a small paper-trading event pipeline.PythonFastAPIDockerQuestDB](/projects/backtesting-system)
+Income
 
-[07 / Market StrategyIn progress![Warehouse Club Market Expansion](/images/warehouse-club-market-expansion-hero.png)Warehouse Club Market ExpansionComparing U.S. metro areas to identify where a fictional regional warehouse club should investigate expansion next.Public DataMarket ResearchBusiness Strategy](/projects/warehouse-club-market-expansion)
+$60K
+
+DTI
+
+18%
+
+Illustrative result
+
+**570**Score
+
+PD 13.7%
+
+Interpretable scorecard
+
+How do borrower inputs shape risk?
+
+### Credit Risk Decision & Portfolio Analytics
+
+Built an end-to-end educational credit-risk case study connecting calibrated probability of default to expected loss, portfolio risk, stress, simulation, approval strategy, and monitoring.
+
+PythonDuckDBpandas
+
+[View Project ](/projects/credit-risk-pd-model)[Dashboard ](/projects/credit-risk-pd-model/dashboard)
+
+[03 / Retail Operations![Retail Allocation Simulator](/images/retail-allocation-simulator-hero.png)Retail Allocation SimulatorAutomates weekly store-item allocation so limited inventory follows consistent business rules and every recommendation can be reviewed in Excel.PythonpandasExcel](/projects/retail-allocation-simulator)
 
 ## Interested in analytics, forecasting, or modeling? Let’s connect.
 
-[Get in touch ](/contact)
+[Get in touch ](/resume)
+
+Ask

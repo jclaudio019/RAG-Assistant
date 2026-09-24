@@ -1,3 +1,8 @@
+# Local secrets
+.env
+.venv/
+venv/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -7,15 +12,12 @@ __pycache__/
 .Python
 build/
 dist/
+*.egg-info/
 
-# Virtual environments
-.env
-.venv
-venv/
-
-# IDE files
+# IDE / OS
 .vscode/
 .idea/
-
-# OS artifacts
 .DS_Store
+
+# Runtime
+.rag_rate_limit.json

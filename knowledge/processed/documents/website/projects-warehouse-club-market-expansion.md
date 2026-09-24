@@ -1,5 +1,5 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Comparing U.S. metro areas to identify where a fictional regional warehouse club should investigate expansion next.
 ---
 
 [Skip to main content](#main-content)
@@ -16,7 +16,7 @@ Comparing U.S. metro areas to identify where a fictional regional warehouse club
 
 [ View on GitHub](https://github.com/jclaudio019/warehouse-club-market-expansion-strategy)
 
-![Warehouse Club Market Expansion project overview](/images/warehouse-club-market-expansion-hero.png)
+![Warehouse Club Market Expansion](/images/warehouse-club-market-expansion-hero.png)
 
 A regional market-screening concept. No market has been ranked or recommended.
 
@@ -27,3 +27,5 @@ Population growth alone does not make a market attractive. Competition, labor, d
 ## In progress
 
 This project is in progress. I’ll update this page as the work develops.
+
+Ask

@@ -1,0 +1,215 @@
+{
+  "description": "Small retrieval evaluation set for the portfolio RAG showcase. Expected documents use document_id values from knowledge/processed/documents/index.json.",
+  "questions": [
+    {
+      "id": "q01_employer_role",
+      "question": "Where does Jose currently work and what is his role?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience"],
+      "required_facts": ["EssilorLuxottica", "Supply Chain Analyst"],
+      "should_answer": true
+    },
+    {
+      "id": "q02_portfolio_value",
+      "question": "What product portfolio value does Jose support at EssilorLuxottica?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience", "website::about"],
+      "required_facts": ["$40M"],
+      "should_answer": true
+    },
+    {
+      "id": "q03_inventory_validation",
+      "question": "What inventory validation initiative did Jose lead and what accuracy improvement was reported?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience", "website::about"],
+      "required_facts": ["$1M", "15%"],
+      "should_answer": true
+    },
+    {
+      "id": "q04_rexel",
+      "question": "What did Jose do at Rexel USA?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience"],
+      "required_facts": ["Rexel", "Financial Analyst"],
+      "should_answer": true
+    },
+    {
+      "id": "q05_python_sql_professional",
+      "question": "Which tools does Jose use professionally for automation and analysis?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience", "website::skills"],
+      "required_facts": ["Python", "SQL"],
+      "should_answer": true
+    },
+    {
+      "id": "q06_forecasting_work",
+      "question": "How does Jose use forecasting in his supply chain work?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience"],
+      "required_facts": ["POS", "forecast"],
+      "should_answer": true
+    },
+    {
+      "id": "q07_education_purdue",
+      "question": "What graduate degree is Jose pursuing and where?",
+      "expected_document_ids": ["career::knowledge_base", "website::about", "website::home"],
+      "required_facts": ["Purdue", "Applied Statistics"],
+      "should_answer": true
+    },
+    {
+      "id": "q08_bryant",
+      "question": "Where did Jose complete his undergraduate degree and what was the concentration?",
+      "expected_document_ids": ["career::knowledge_base", "website::about"],
+      "required_facts": ["Bryant", "Finance"],
+      "should_answer": true
+    },
+    {
+      "id": "q09_frm_status",
+      "question": "Has Jose earned the FRM certification?",
+      "expected_document_ids": ["career::knowledge_base"],
+      "required_facts": ["FRM", "Candidate"],
+      "should_answer": true
+    },
+    {
+      "id": "q10_no_genai_at_work",
+      "question": "Has Jose deployed RAG or GenAI systems professionally at EssilorLuxottica?",
+      "expected_document_ids": ["career::knowledge_base"],
+      "required_facts": ["Do **not** claim", "GenAI"],
+      "should_answer": true
+    },
+    {
+      "id": "q11_retail_forecasting_project",
+      "question": "What is the Retail Demand Forecasting project about?",
+      "expected_document_ids": [
+        "website::projects-retail-demand-forecasting",
+        "project::retail-operations::README.md",
+        "project::retail-operations::Final_Report.md"
+      ],
+      "required_facts": ["forecast"],
+      "should_answer": true
+    },
+    {
+      "id": "q12_credit_risk_project",
+      "question": "What modeling approach does the credit risk portfolio project use?",
+      "expected_document_ids": [
+        "website::projects-credit-risk-pd-model",
+        "project::credit_risk::README.md",
+        "project::credit_risk::Final_Report.md",
+        "career::knowledge_base"
+      ],
+      "required_facts": ["credit"],
+      "should_answer": true
+    },
+    {
+      "id": "q13_credit_not_professional_uw",
+      "question": "Did Jose perform professional credit underwriting or borrower decision authority?",
+      "expected_document_ids": ["career::knowledge_base"],
+      "required_facts": ["Never claim formal credit underwriting"],
+      "should_answer": true
+    },
+    {
+      "id": "q14_allocation_simulator",
+      "question": "What does the Retail Allocation Simulator project demonstrate?",
+      "expected_document_ids": [
+        "website::projects-retail-allocation-simulator",
+        "project::retail-allocation-simulator::README.md",
+        "project::retail-allocation-simulator::workflow.md"
+      ],
+      "required_facts": ["allocation"],
+      "should_answer": true
+    },
+    {
+      "id": "q15_time_series",
+      "question": "What methods appear in the time-series analysis project?",
+      "expected_document_ids": [
+        "website::projects-time-series-analysis-r",
+        "project::time_series_analysis::README.md"
+      ],
+      "required_facts": ["time"],
+      "should_answer": true
+    },
+    {
+      "id": "q16_black_scholes",
+      "question": "What does the Black-Scholes options modeling project explore?",
+      "expected_document_ids": [
+        "website::projects-black-scholes-options-modeling",
+        "project::black-scholes-options-modeling::README.md"
+      ],
+      "required_facts": ["Black-Scholes"],
+      "should_answer": true
+    },
+    {
+      "id": "q17_backtesting",
+      "question": "Is the backtesting system a production trading platform?",
+      "expected_document_ids": [
+        "website::projects-backtesting-system",
+        "project::backtesting-system::README.md",
+        "career::knowledge_base"
+      ],
+      "required_facts": ["educational"],
+      "should_answer": true
+    },
+    {
+      "id": "q18_skills_stats",
+      "question": "What statistical and machine learning skills does Jose list?",
+      "expected_document_ids": ["career::knowledge_base", "website::skills", "website::about"],
+      "required_facts": ["regression"],
+      "should_answer": true
+    },
+    {
+      "id": "q19_location",
+      "question": "Where is Jose based?",
+      "expected_document_ids": ["career::knowledge_base", "website::home", "website::about"],
+      "required_facts": ["Orange City"],
+      "should_answer": true
+    },
+    {
+      "id": "q20_multi_source_forecasting",
+      "question": "How do Jose's professional forecasting work and his retail demand forecasting project relate, and how should they be kept distinct?",
+      "expected_document_ids": [
+        "career::knowledge_base",
+        "website::experience",
+        "website::projects-retail-demand-forecasting"
+      ],
+      "required_facts": ["forecast"],
+      "should_answer": true
+    },
+    {
+      "id": "q21_vmi",
+      "question": "What vendor-managed inventory experience does Jose have?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience"],
+      "required_facts": ["Vendor Managed Inventory"],
+      "should_answer": true
+    },
+    {
+      "id": "q22_sql_depth",
+      "question": "Does Jose use SQL in his professional analytics work?",
+      "expected_document_ids": ["career::knowledge_base", "website::experience", "website::skills"],
+      "required_facts": ["SQL"],
+      "should_answer": true
+    },
+    {
+      "id": "q23_abstain_salary",
+      "question": "What is Jose's current salary and compensation package?",
+      "expected_document_ids": [],
+      "required_facts": [],
+      "should_answer": false,
+      "notes": "Insufficient evidence — assistant should abstain."
+    },
+    {
+      "id": "q24_abstain_secret_clearance",
+      "question": "Does Jose hold a U.S. government security clearance?",
+      "expected_document_ids": [],
+      "required_facts": [],
+      "should_answer": false
+    },
+    {
+      "id": "q25_abstain_unrelated",
+      "question": "What is Jose's favorite Formula 1 team and why?",
+      "expected_document_ids": [],
+      "required_facts": [],
+      "should_answer": false
+    },
+    {
+      "id": "q26_lumina",
+      "question": "What is Lumina in Jose's portfolio narrative?",
+      "expected_document_ids": ["career::knowledge_base"],
+      "required_facts": ["Lumina", "personal"],
+      "should_answer": true
+    }
+  ]
+}

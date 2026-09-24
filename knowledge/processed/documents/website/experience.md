@@ -1,5 +1,5 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Professional experience in forecasting, inventory analysis, financial reporting, automation, and decision support.
 ---
 
 [Skip to main content](#main-content)
@@ -38,7 +38,7 @@ Build repeatable analytical workflows that reduce manual effort, improve data re
 
 Related public case studies
 
-[Retail Allocation Simulator ↗](/projects/retail-allocation-simulator)[Retail Demand Forecasting ↗](/projects/retail-demand-forecasting)[Credit Risk Probability of Default ↗](/projects/credit-risk-pd-model)
+[Retail Allocation Simulator ↗](/projects/retail-allocation-simulator)[Retail Demand Forecasting ↗](/projects/retail-demand-forecasting)[Credit Risk Decision & Portfolio Analytics ↗](/projects/credit-risk-pd-model)
 
 03
 
@@ -58,7 +58,7 @@ Portfolio evidence
 
 Related public case studies
 
-[Credit Risk Probability of Default ↗](/projects/credit-risk-pd-model)[Time-Series Analysis & Forecasting in R ↗](/projects/time-series-analysis-r)
+[Credit Risk Decision & Portfolio Analytics ↗](/projects/credit-risk-pd-model)[Time-Series Analysis & Forecasting in R ↗](/projects/time-series-analysis-r)
 
 Professional Context
 
@@ -68,4 +68,6 @@ My analytical experience has developed across EssilorLuxottica, Rexel USA, and F
 * Rexel USA — Financial Analyst and Corporate Accounting Analyst
 * FGX International — Vendor Managed Inventory Analyst
 
-[View complete experience on LinkedIn](https://www.linkedin.com/in/jclaudio019)[Resume available on request](/resume)
+[View complete experience on LinkedIn](https://www.linkedin.com/in/jclaudio019)[View resume](/resume)
+
+Ask

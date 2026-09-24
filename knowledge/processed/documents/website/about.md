@@ -1,10 +1,10 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Learn how Jose Claudio combines finance, operations, supply chain, and applied statistics.
 ---
 
 [Skip to main content](#main-content)
 
-About
+About Me
 
 # Where finance, operations, and applied statistics meet.
 
@@ -23,7 +23,7 @@ M.S. in Applied Statistics
 
 West Lafayette, Indiana
 
-Expected May 2027
+Expected 2027
 
 Coursework: Linear Regression · Probability · Statistical Inference · Time-Series Analysis
 
@@ -37,7 +37,7 @@ Graduated May 2020
 
 01
 
-### How It Started
+## How It Started
 
 Hi, I'm Jose. I'm originally from Puerto Rico and currently based in Orange City, Florida. My path into analytics began while I was completing my bachelor's degree in finance at Bryant University.
 
@@ -45,13 +45,13 @@ During my senior year, courses in computer science and data analysis for finance
 
 02
 
-### Professional Application
+## Professional Application
 
 In my current work, I develop POS-driven forecasts and allocation analyses for retail accounts within a $40M+ product portfolio. I use Python, Excel, VBA, and Power Query to automate reporting, validate data, analyze performance, and support inventory and planning decisions. I also led a $1M+ inventory-validation initiative that improved data accuracy by 15%.
 
 03
 
-### Why Applied Statistics
+## Why Applied Statistics
 
 As my work became more analytical, I wanted to better understand why different methods work, when to use them, and how to evaluate their results.
 
@@ -59,8 +59,10 @@ I am now pursuing an M.S. in Applied Statistics at Purdue University. My graduat
 
 04
 
-### What I Build Now
+## What I Build Now
 
 I am most interested in practical problems that sit between data and decisions. My portfolio includes demand forecasting, interpretable credit-risk modeling, time-series analysis, and allocation logic.
 
-Each project is built around a real business question and documents the methods, assumptions, validation, limitations, and decision implications—not only the final output. My goal is to build solutions that are clear, explainable, and useful to the people making the decision.
+Each project begins with understanding the business question, the process, and the people affected by the decision. I identify where analysis or automation can help, then use AI and software to accelerate implementation, auditing, visualization, and communication—while keeping root-cause analysis, context, judgment, and final review human-led.
+
+Ask

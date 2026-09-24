@@ -1,70 +1,92 @@
 ---
-description: Portfolio of Jose Claudio, an analytics professional combining forecasting, statistical modeling, automation, finance, and supply-chain decision support.
+description: Built an end-to-end educational credit-risk case study connecting calibrated probability of default to expected loss, portfolio risk, stress, simulation, approval strategy, and monitoring.
 ---
 
 [Skip to main content](#main-content)
 
 [ All Case Studies](/projects)
 
-02 — Credit Risk Modeling
+03 — Credit Risk Modeling
 
-# Credit Risk Probability of Default
+# Credit Risk Decision & Portfolio Analytics
 
-Built an interpretable historical risk-ranking model and illustrative scorecard using Lending Club loan outcomes.
+Built an end-to-end educational credit-risk case study connecting calibrated probability of default to expected loss, portfolio risk, stress, simulation, approval strategy, and monitoring.
 
-[ View on GitHub](https://github.com/jclaudio019/credit%5Frisk)
+[ View on GitHub](https://github.com/jclaudio019/credit%5Frisk)[Launch Dashboard ](/projects/credit-risk-pd-model/dashboard)
 
-![Credit Risk Probability of Default project overview](/images/credit-risk-pd-model-hero-v2.png)
+Sample inputs
+
+Grade
+
+C
+
+Income
+
+$60K
+
+DTI
+
+18%
+
+Illustrative result
+
+**570**Score
+
+PD 13.7%
+
+Interpretable scorecard
+
+How do borrower inputs shape risk?
 
 The balance between repayment strength and default risk determines the illustrative score.
 
 466,285
 
-Historical records
+Historical accounts
 
-0.699
+0.669
 
-Held-out AUC
+Out-of-time AUC
 
-300-850
+$771.6M
 
-Illustrative score
+Portfolio expected loss\*
 
-Educational historical analysis only. The score is illustrative and is not a lending decision or production credit score.
+\*Educational estimate using documented LGD/EAD assumptions; 11.58% of $6.66B exposure. Not a reserve, pricing rule, or lending decision.
 
 ## Business Problem
 
-Lenders need a consistent way to compare repayment risk, but a model score should not become an automatic approval decision. The business problem is to identify useful risk differences in borrower and loan information, explain what drives the score, and show how different decision thresholds change the result.
+A borrower-level probability score is only one part of a credit decision. The project asks how to build an interpretable PD model, turn it into expected loss, understand portfolio concentration and tail risk, test transparent downturn sensitivities, evaluate approval thresholds, and monitor stability without presenting an educational model as a lending policy.
 
 ## Solution
 
-I built an interpretable historical risk-ranking model. Data preparation and category groupings were learned from the training data and then applied unchanged to the test data.
+I organized a notebook-first workflow around time-based train, validation, and out-of-time test vintages. A logistic champion was calibrated on the 2013 validation vintage and evaluated on 2014 loans, keeping development and final evaluation separate.
 
-Weight of Evidence and Information Value were used to study risk patterns. The final logistic regression uses grouped categories so the direction and contribution of each input remain explainable.
+The calibrated PD feeds a transparent expected-loss calculation (PD × LGD × EAD), segment reporting, independent and correlated-default simulation, sensitivity stress scenarios, and a threshold explorer. Monitoring adds PSI and vintage performance with explicit seasoning warnings.
 
-The model estimates P(good) under a simplified historical loan-status target and derives probability of default as 1 − P(good). AUC, Gini, and KS measure how well the model ranks risk, while an illustrative 300–850 score makes the relationship easier to understand. The score is not an approval or pricing rule.
+DuckDB provides the analytical data layer, while deterministic static exports power the public dashboard without introducing a separate backend service. Model scoring remains visible in the analytical workflow and final notebook.
 
 ## Dataset
 
-The analysis reviewed 466,285 historical Lending Club loan records. A stratified 80/20 split produced 373,028 training rows and 93,257 held-out rows. The historical good\_bad target labels specified charge-off, default, and late-status outcomes as bad (0), with the remaining observed statuses labelled good standing (1).
+The analysis covers 466,285 historical Lending Club loans issued from 2007 through 2014\. Time-based splits use loans through 2012 for training (95,902), 2013 for validation/calibration (134,755), and 2014 as the out-of-time test book (235,628). The target is a simplified loan-status default proxy.
 
 ## Methodology
 
-Training and test data were kept separate, grouped inputs were used in an interpretable logistic regression, and AUC, Gini, and KS measured risk ranking. Model output was then translated into an illustrative score.
+The workflow moves from reproducible DuckDB preparation through calibrated PD modeling, expected loss, portfolio aggregation, Monte Carlo simulation, sensitivity stress, approval thresholds, and monitoring. Each major notebook retains the underlying educational calculation before helper reuse.
 
 Step-by-step method · 7 steps
 
-* 01Prepared historical loan data, defined the good\_bad proxy, and created a stratified 80/20 train/test split so model development and evaluation remained separate.
-* 02Learned cleaning rules, imputation statistics, category definitions, and numeric intervals from training rows, then applied them unchanged to held-out rows to prevent leakage.
-* 03Used Weight of Evidence to inspect risk ordering and similarity across categories and intervals, creating groups that stakeholders can challenge and interpret.
-* 04Used Information Value as a descriptive separation diagnostic, not an automatic feature-selection cutoff, so grouping and coarse classing remained grounded in observed risk ordering and similarity.
-* 05Fit logistic regression with one-hot encoded grouped categories rather than numeric WoE values, retaining explicit reference categories and feature direction for interpretation.
-* 06Evaluated held-out ranking with ROC/AUC, Gini, and KS across thresholds, then showed how the displayed 0.5 P(good) threshold turns ranking into one classification rule.
-* 07Translated fitted log-odds into an illustrative 300-850 scorecard so relative historical risk could be discussed on a familiar scale without implying a decision rule.
+* 01Prepared and validated the canonical analytical table in DuckDB, then created chronological train, validation, and out-of-time test cohorts.
+* 02Compared an interpretable logistic model with a nonlinear challenger, selected the champion on validation evidence, and calibrated probability levels before final evaluation.
+* 03Evaluated out-of-time discrimination, calibration, Brier score, KS, and a bootstrap AUC interval while keeping a classification threshold separate from ranking quality.
+* 04Calculated account expected loss as PD × LGD × EAD and reconciled account-level results to portfolio and segment totals.
+* 05Simulated independent defaults and a one-factor correlated-default scenario, then summarized loss distributions with VaR and expected shortfall.
+* 06Applied transparent PD, LGD, and EAD sensitivity scenarios and explored how candidate PD thresholds change approvals, exposure, expected defaults, and loss.
+* 07Measured population shift with PSI and compared predicted versus observed vintage performance, explicitly flagging under-seasoned outcomes.
 
 ## Findings
 
-The model achieved an AUC of 0.699, Gini of 0.399, and KS of 0.292 on the test data. This supports relative risk ranking, but it does not cleanly separate good and bad outcomes. At the displayed 0.5 P(good) threshold, the model detected only 10 of 10,194 bad loans. The main lesson is that useful risk ranking does not automatically create a useful decision cutoff.
+The calibrated logistic model achieved 0.669 ROC-AUC, 0.245 KS, and 0.075 Brier score on the 2014 out-of-time book. Estimated expected loss was $771.6M, or 11.58% of $6.66B exposure, under the documented assumptions. Correlated defaults widened the simulated tail materially, severe sensitivity more than doubled expected loss, and 2014 PSI was low at 0.008—but the vintage is under-seasoned, so its observed default rate is downward-biased.
 
 Interactive scorecard
 
@@ -112,7 +134,7 @@ Calculate
 
 ## Business Implications
 
-The model can support risk segmentation and threshold analysis, but it cannot set approval or pricing rules by itself. A real credit policy would need to compare the costs of missed defaults and rejected good borrowers and add calibration, monitoring, fairness review, and governance.
+The analysis shows how model ranking becomes a portfolio decision framework, but it does not select a production cutoff. A real lender would need pricing, operating costs, recoveries, fairness testing, policy constraints, outcome maturity, and governance before using the model for underwriting.
 
 ## Conclusion
 
@@ -122,17 +144,19 @@ The remaining business question is which threshold creates an acceptable balance
 
 ## Limitations
 
-* The historical good\_bad proxy has no fixed performance-horizon default definition.
-* A random holdout does not establish temporal stability, population stability, or performance through changing economic conditions.
-* The probabilities and illustrative 300-850 score are not calibrated for production use.
-* The displayed 0.5 P(good) threshold has extremely weak bad-loan recall and is not a business policy.
-* Fairness, monitoring, regulatory suitability, and model governance have not been assessed.
-* Advanced models may improve discrimination, but complexity must be justified against interpretability, stability, calibration, validation, auditability, implementation cost, and stakeholder explainability.
-* This is not an IFRS 9 model and does not estimate expected credit loss, LGD, EAD, staging, or forward-looking economic scenarios.
+* The historical loan-status target is a simplified default proxy rather than a fixed performance-horizon definition.
+* LGD and EAD use documented simplifying assumptions; expected loss is not an accounting reserve or realized loss.
+* The portfolio-default correlation is assumed rather than empirically calibrated.
+* Stress results are transparent sensitivity scenarios, not regulatory macroeconomic stress tests.
+* The 2014 test vintage is under-seasoned, which biases observed default outcomes downward.
+* Candidate thresholds demonstrate trade-offs; no optimal approval, pricing, or lending policy is claimed.
+* Fairness, regulatory suitability, production monitoring controls, and formal model governance require further work.
 * Historical Lending Club accounts may not represent a current institution, portfolio, policy, or economic environment.
 
 ## Technologies
 
-PythonpandasNumPystatsmodelsscikit-learnJupyter
+PythonDuckDBpandasscikit-learnReactRechartsJupyter
 
 [Next case studyRetail Allocation Simulator](/projects/retail-allocation-simulator)
+
+Ask

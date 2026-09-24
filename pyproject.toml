@@ -4,11 +4,24 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rag-assistant"
-version = "0.1.0"
+version = "0.2.0"
 description = "RAG-powered portfolio assistant for career and technical work discovery"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "langchain-text-splitters>=0.2.0",
     "tiktoken>=0.7.0",
+    "numpy>=1.26.0",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
 ]
+
+[project.optional-dependencies]
+ingest-spa = ["playwright>=1.40.0"]
+dev = ["playwright>=1.40.0"]
+
+[project.scripts]
+rag-assistant = "rag_assistant.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

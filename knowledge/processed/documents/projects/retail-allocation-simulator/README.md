@@ -10,7 +10,7 @@ When inventory cannot satisfy every suggested store order, how can a retailer ma
 
 ## Scope
 
-The simulator evaluates one weekly allocation snapshot across two retail categories. It works with suggested store-item orders and considers distribution-center availability, current store inventory, store rank, recent sales activity, item capacity, minimum shipment value, and optional dollar targets.
+The model evaluates one weekly allocation snapshot across two retail categories. It works with suggested store-item orders and considers distribution-center availability, current store inventory, store rank, recent sales activity, item capacity, minimum shipment value, and optional dollar targets.
 
 The included large weekly example contains 325,000 unique store-item rows in one weekly snapshot. `Recent Item Sales` is an illustrative year-to-date measure. The public ranks are A1, A2, A3, B, C, D, and E, where A1 is the strongest rank and E is the weakest. The generator uses independently created fictional values; it does not open or resample employer rows, source rows, or identifiers.
 
@@ -18,19 +18,17 @@ It is designed to produce an auditable allocation recommendation and supporting 
 
 ## Methodology
 
-The allocation process first prepares and validates the weekly inputs. It then identifies whether each item is balanced, short, or has inventory available to increase orders. Short items are reduced using inventory, rank, and sales-based priority. Available inventory can be added one unit at a time only when store capacity, item availability, line limits, shipment requirements, and target rules allow it. When a target requires a further reduction, the simulator can remove complete qualifying store allocations using defined business logic.
+The allocation process first prepares and validates the weekly inputs, including optional item exclusions and store holds. Capacity starts from the original projected store-category inventory, is restored when units are removed, and is consumed one unit at a time during increases. The process then identifies whether each item is balanced, short, or has inventory available to increase orders. Short items are reduced using inventory, rank, and sales-based priority. Available inventory can be added only when store capacity, item availability, line limits, shipment requirements, and target rules allow it. When a target requires a further reduction, the model can remove complete qualifying store allocations using defined business logic.
 
 The completed workbook preserves the process in audit tabs so a reviewer can see the final recommendation, availability checks, and approval conditions. See [workflow.md](workflow.md) for the complete plain-language methodology and worked scenarios.
 
 ## Validation
 
-I manually reviewed and validated the simulator outputs against the weekly synthetic scenarios. The automated test suite translates selected requested scenarios into repeatable code checks for cases such as shortages, surplus availability, capacity limits, minimum shipment, target accounting, validation, and approval flags. Those implementation tests support, but do not replace, manual business validation.
+The portfolio author manually verified and validated the model outputs through the weekly business review process. The automated test suite translates selected requested scenarios into repeatable code checks for cases such as shortages, surplus availability, capacity limits, minimum shipment, target accounting, validation, and approval flags. Those implementation tests support, but do not replace, manual business validation.
 
-## AI-assisted development
+## AI collaboration
 
-I defined the business problem, allocation logic, requirements, decision rules, validation criteria, and weekly scenarios. I used generative AI through Codex, Claude Code, Antigravity IDE, and CLI-based workflows to help translate those specifications into code, tests, and documentation.
-
-The simulator remains a rule-based analytical workflow, not a generative-AI product or AI model. I reviewed and validated the implementation, business rules, and outputs.
+The portfolio author defined the business problem, allocation logic, requirements, decision rules, and weekly scenarios. AI helped structure the specifications, implement the background code, prepare documentation, and translate the requested scenarios into automated tests. This collaboration let the author keep focused on other work while the implementation and test automation progressed under the defined business direction.
 
 ## Reproducibility
 
