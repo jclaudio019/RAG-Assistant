@@ -19,5 +19,9 @@ dist/
 .idea/
 .DS_Store
 
+# Local AI-agent configuration
+.agents/
+AGENTS.md
+
 # Runtime
 .rag_rate_limit.json
