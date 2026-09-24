@@ -1,6 +1,10 @@
 # RAG-Assistant
 
-I built this project to understand how RAG works beyond simply calling an LLM with extra context. Starting with public information from my portfolio, I created an ingestion and structure-aware chunking pipeline, then added embeddings, semantic retrieval, grounding, citations, and evaluation. The goal was to understand where retrieval quality comes from, what fails, and how the system behaves when the available evidence is incomplete.
+I use AI most often to remove repetitive work, but I kept encountering Retrieval-Augmented Generation without fully understanding what happened between a source document and a grounded answer. I built this project to examine that pipeline one part at a time: ingestion, chunking, embeddings, retrieval, context assembly, generation, citations, abstention, and evaluation.
+
+Chunking was the first design question. I considered three common approaches: fixed-size chunks, recursive splitting, and semantic or document-structure-aware chunks. For this corpus, headings and document hierarchy carry useful context, so I chose structure-aware Markdown splitting with recursive subdivision only when a section is too large.
+
+The practical use case came from my portfolio. A résumé and project page cannot contain every relevant detail, while a general chatbot can easily blur professional experience, project work, and unsupported claims. The result is a live portfolio assistant that retrieves from allowlisted public sources, labels the type of experience, cites the evidence, links to the relevant work, and abstains when the available context is insufficient.
 
 This is a **portfolio learning showcase**, not an enterprise platform.
 
@@ -36,7 +40,7 @@ Cited answer  or  explicit abstention
 | Choice | Reason |
 | --- | --- |
 | Reuse existing Stage 1–2 ingest/chunk | Already solid; no rewrite without eval evidence |
-| Cloudflare BGE embeddings | Low cost, existing Cloudflare credentials, 768-d, fine for 154 chunks |
+| Cloudflare BGE embeddings | Low cost, existing Cloudflare credentials, 768-d, sufficient for 153 chunks |
 | Numpy / Worker cosine index | Tiny corpus; transparent; no Pinecone/Qdrant ops |
 | No reranking (yet) | Baseline eval hit **100%** source + fact rates |
 | Cloudflare Llama generation (default) | Gemini prepaid credits were depleted; Gemini still supported via env. Live model: `@cf/meta/llama-3.3-70b-instruct-fp8-fast` |
