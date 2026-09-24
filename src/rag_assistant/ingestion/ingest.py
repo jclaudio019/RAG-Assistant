@@ -50,7 +50,6 @@ WEBSITE_PAGE_ORDER: List[dict] = [
     {"path": "/projects/retail-allocation-simulator", "slug": "projects-retail-allocation-simulator", "title": "Retail allocation simulator"},
     {"path": "/projects/time-series-analysis-r", "slug": "projects-time-series-analysis-r", "title": "Time-series analysis"},
     {"path": "/projects/black-scholes-options-modeling", "slug": "projects-black-scholes-options-modeling", "title": "Black-Scholes modeling"},
-    {"path": "/projects/backtesting-system", "slug": "projects-backtesting-system", "title": "Backtesting system"},
     {"path": "/projects/warehouse-club-market-expansion", "slug": "projects-warehouse-club-market-expansion", "title": "Warehouse club expansion"},
     {"path": "/experience", "slug": "experience", "title": "Experience"},
     {"path": "/skills", "slug": "skills", "title": "Skills"},
@@ -326,6 +325,29 @@ def _save_state(index: dict):
     _write_json(INDEX_PATH, {"documents": [index[k] for k in sorted(index)]})
 
 
+def _prune_unconfigured_sources(index: dict) -> None:
+    configured_website_ids = {f"website::{page['slug']}" for page in WEBSITE_PAGE_ORDER}
+    configured_project_ids = {
+        f"project::{project['repo']}::{file_path}"
+        for project in SHOWCASED_PROJECTS
+        for file_path in project.get("doc_files", ["README.md"])
+    }
+    stale_keys = [
+        document_id
+        for document_id in index
+        if (
+            document_id.startswith("website::")
+            and document_id not in configured_website_ids
+        )
+        or (
+            document_id.startswith("project::")
+            and document_id not in configured_project_ids
+        )
+    ]
+    for document_id in stale_keys:
+        del index[document_id]
+
+
 def _sanitize_state_field(value: Optional[str]) -> str:
     if not value:
         return ""
@@ -587,11 +609,7 @@ def ingest_all_sources() -> dict:
     project_ingested = _ingest_project_docs(index)
     career_ingested = _ingest_career_profile(index)
 
-    # Prune stale project entries that are not in the current project set
-    current_project_ids = set(project_ingested)
-    stale_keys = [k for k in index if k.startswith("project::") and k not in current_project_ids]
-    for k in stale_keys:
-        del index[k]
+    _prune_unconfigured_sources(index)
 
     _save_state(index)
     return {

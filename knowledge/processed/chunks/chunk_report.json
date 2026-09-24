@@ -1,17 +1,17 @@
 {
-  "documents_processed": 26,
-  "total_chunks": 268,
-  "total_source_tokens": 29874,
-  "total_chunk_tokens": 30154,
+  "documents_processed": 25,
+  "total_chunks": 267,
+  "total_source_tokens": 29828,
+  "total_chunk_tokens": 30106,
   "duplication_ratio": 1.009,
   "min_tokens": 15,
   "max_tokens": 847,
-  "avg_tokens": 112.5,
-  "median_tokens": 80.0,
+  "avg_tokens": 112.8,
+  "median_tokens": 80,
   "p90_tokens": 232,
   "source_word_coverage_pct": 100.0,
   "token_distribution": {
-    "< 100 tokens": 156,
+    "< 100 tokens": 155,
     "100 – 300 tokens": 99,
     "300 – 500 tokens": 10,
     "500 – 700 tokens": 2,
@@ -194,20 +194,10 @@
       "title": "Projects",
       "source_type": "website",
       "chunks": 12,
-      "total_tokens": 1103,
-      "avg_tokens": 91.91666666666667,
+      "total_tokens": 1107,
+      "avg_tokens": 92.25,
       "min_tokens": 19,
       "max_tokens": 364
-    },
-    {
-      "document_id": "website::projects-backtesting-system",
-      "title": "Backtesting system",
-      "source_type": "website",
-      "chunks": 1,
-      "total_tokens": 56,
-      "avg_tokens": 56.0,
-      "min_tokens": 56,
-      "max_tokens": 56
     },
     {
       "document_id": "website::projects-black-scholes-options-modeling",
@@ -274,8 +264,8 @@
       "title": "Skills",
       "source_type": "website",
       "chunks": 12,
-      "total_tokens": 1103,
-      "avg_tokens": 91.91666666666667,
+      "total_tokens": 1107,
+      "avg_tokens": 92.25,
       "min_tokens": 19,
       "max_tokens": 364
     }

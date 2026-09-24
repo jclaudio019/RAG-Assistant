@@ -40,7 +40,7 @@ Cited answer  or  explicit abstention
 | Choice | Reason |
 | --- | --- |
 | Reuse existing Stage 1–2 ingest/chunk | Already solid; no rewrite without eval evidence |
-| Cloudflare BGE embeddings | Low cost, existing Cloudflare credentials, 768-d, sufficient for 268 chunks |
+| Cloudflare BGE embeddings | Low cost, existing Cloudflare credentials, 768-d, sufficient for 267 chunks |
 | Numpy / Worker cosine index | Tiny corpus; transparent; no Pinecone/Qdrant ops |
 | No reranking (yet) | Baseline eval hit **100%** source + fact rates |
 | Cloudflare Llama generation (default) | Gemini prepaid credits were depleted; Gemini still supported via env. Live model: `@cf/meta/llama-3.3-70b-instruct-fp8-fast` |
@@ -48,8 +48,8 @@ Cited answer  or  explicit abstention
 
 ## Corpus
 
-- 26 documents (12 website, 13 project, 1 career knowledge base)
-- 268 structure-aware chunks
+- 25 documents (11 website, 13 project, 1 career knowledge base)
+- 267 structure-aware chunks
 - Artifact: `knowledge/processed/chunks/chunks.jsonl`
 
 ## Commands

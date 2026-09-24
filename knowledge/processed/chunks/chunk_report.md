@@ -2,9 +2,9 @@
 
 ## Summary Metrics
 
-- **Documents Processed:** 26
-- **Total Chunks Produced:** 268
-- **Average Chunk Tokens:** 112.5
+- **Documents Processed:** 25
+- **Total Chunks Produced:** 267
+- **Average Chunk Tokens:** 112.8
 - **Median Chunk Tokens:** 80.0
 - **Token Range:** 15 – 847 tokens
 - **90th Percentile (p90):** 232.0 tokens
@@ -15,8 +15,8 @@
 
 | Token Range | Chunk Count | Percentage |
 | :--- | :--- | :--- |
-| < 100 tokens | 156 | 58.2% |
-| 100 – 300 tokens | 99 | 36.9% |
+| < 100 tokens | 155 | 58.1% |
+| 100 – 300 tokens | 99 | 37.1% |
 | 300 – 500 tokens | 10 | 3.7% |
 | 500 – 700 tokens | 2 | 0.7% |
 | 700 – 850 tokens | 1 | 0.4% |
@@ -53,12 +53,11 @@
 | `website::about` | 5 | 101.4 | 79 / 149 | website |
 | `website::experience` | 4 | 184.0 | 89 / 305 | website |
 | `website::home` | 10 | 79.3 | 16 / 281 | website |
-| `website::projects` | 12 | 91.9 | 19 / 364 | website |
-| `website::projects-backtesting-system` | 1 | 56.0 | 56 / 56 | website |
+| `website::projects` | 12 | 92.2 | 19 / 364 | website |
 | `website::projects-black-scholes-options-modeling` | 12 | 129.0 | 32 / 456 | website |
 | `website::projects-credit-risk-pd-model` | 11 | 133.5 | 40 / 269 | website |
 | `website::projects-retail-allocation-simulator` | 11 | 95.1 | 34 / 232 | website |
 | `website::projects-retail-demand-forecasting` | 12 | 170.4 | 43 / 501 | website |
 | `website::projects-time-series-analysis-r` | 10 | 106.5 | 36 / 217 | website |
 | `website::projects-warehouse-club-market-expansion` | 3 | 68.3 | 22 / 138 | website |
-| `website::skills` | 12 | 91.9 | 19 / 364 | website |
+| `website::skills` | 12 | 92.2 | 19 / 364 | website |

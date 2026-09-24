@@ -47,6 +47,24 @@ class TestCitations(unittest.TestCase):
             "https://joseoclaudio.com/experience",
         )
 
+    def test_unpublished_backtesting_project_uses_github_and_coursework_scope(self):
+        repository = "https://github.com/jclaudio019/backtesting-system"
+        document_id = "project::backtesting-system::README.md"
+
+        self.assertEqual(
+            explore_url(
+                document_id=document_id,
+                source_type="project",
+                source_url=repository,
+                repo_url=repository,
+            ),
+            repository,
+        )
+        self.assertEqual(
+            experience_category("project", "Backtesting System", document_id),
+            "coursework",
+        )
+
     def test_career_h1_portfolio_word_does_not_force_project_category(self):
         self.assertEqual(
             experience_category(

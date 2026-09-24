@@ -13,7 +13,6 @@ PROJECT_PAGE = {
     "retail-allocation-simulator": "/projects/retail-allocation-simulator",
     "time_series_analysis": "/projects/time-series-analysis-r",
     "black-scholes-options-modeling": "/projects/black-scholes-options-modeling",
-    "backtesting-system": "/projects/backtesting-system",
     "warehouse-club-market-expansion-strategy": "/projects/warehouse-club-market-expansion",
 }
 
@@ -31,6 +30,8 @@ def experience_category(source_type: str, heading_path: str = "", document_id: s
             return "skills"
         return "website"
     if source_type == "project":
+        if document_id.startswith("project::backtesting-system::"):
+            return "coursework"
         if "coursework" in path or "assignment" in path or "graduate" in path:
             return "coursework"
         return "portfolio_project"

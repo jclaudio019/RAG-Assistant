@@ -70,7 +70,7 @@ Portfolio Evidence
 
 ## Case Studies
 
-[01 / Systems![Interactive RAG — Retrieval & Grounding Showcase](/images/interactive-rag-hero.svg)Interactive RAG — Retrieval & Grounding ShowcaseA grounded portfolio discovery assistant backed by a public RAG pipeline — useful for navigation, with a separate technical case study of retrieval, grounding, and citations.PythonCloudflare Workers AIFastAPI](/projects/interactive-rag)
+[01 / Systems![Interactive RAG — Retrieval & Grounding Showcase](/images/interactive-rag-hero.svg)Interactive RAG — Retrieval & Grounding ShowcaseA learning project built to understand RAG from ingestion and chunking through retrieval, grounding, citations, abstention, and evaluation — applied as an interactive guide to my portfolio.PythonCloudflare Workers AIFastAPI](/projects/interactive-rag)
 
 [02 / ForecastingValidation-selected test WAPELower is betterFOODS10.22%HOBBIES8.78%HOUSEHOLD8.31%Forecast risk & inventory sensitivityFrom demand forecast to decision tradeoffRetail Demand ForecastingBuilt a leakage-aware demand forecasting workflow, then tested how forecast uncertainty changes service and inventory exposure under controlled policy scenarios.Pythonpandasstatsmodels](/projects/retail-demand-forecasting)
 

@@ -424,7 +424,7 @@
         0.8545,
         0.8516,
         0.8507,
-        0.8296
+        0.8315
       ]
     },
     {
@@ -529,7 +529,7 @@
       "retrieved_document_ids": [
         "career::knowledge_base",
         "website::skills",
-        "career::knowledge_base",
+        "website::skills",
         "career::knowledge_base",
         "career::knowledge_base"
       ],
@@ -540,9 +540,9 @@
       "top_scores": [
         0.7893,
         0.7571,
+        0.7476,
         0.7441,
-        0.7419,
-        0.7414
+        0.7419
       ]
     },
     {
@@ -602,7 +602,7 @@
         0.7761,
         0.7693,
         0.7664,
-        0.7662
+        0.7653
       ]
     },
     {
